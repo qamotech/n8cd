@@ -50,7 +50,7 @@ button:focus-visible, input:focus-visible, [tabindex]:focus-visible{
   background:radial-gradient(circle at 50% 38%, #14245c, var(--bg) 72%);
   transition:opacity .5s ease, visibility .5s;
 }
-#splash.hide{opacity:0; visibility:hidden;}
+#splash.hide{opacity:0; visibility:hidden; pointer-events:none;}
 #splash .gem{font-size:84px; animation:gemPulse 1.15s ease-in-out infinite;}
 @keyframes gemPulse{0%,100%{transform:scale(1); filter:drop-shadow(0 0 6px rgba(52,211,153,.35));}50%{transform:scale(1.14); filter:drop-shadow(0 0 26px rgba(52,211,153,.85));}}
 #splash .s-title{font-size:24px; font-weight:800; letter-spacing:.4px;
@@ -72,16 +72,18 @@ button:focus-visible, input:focus-visible, [tabindex]:focus-visible{
   transition:box-shadow .25s ease;
 }
 .topbar.scrolled{box-shadow:0 10px 28px rgba(0,0,0,.5);}
-.tb-row{display:flex; align-items:center; justify-content:space-between; gap:10px;}
-.brand-title{font-size:23px; font-weight:800; letter-spacing:.3px; white-space:nowrap;
+.tb-row{display:flex; align-items:center; gap:10px;}
+.brand-wrap{flex:1; min-width:0;}
+.brand-title{font-size:22px; font-weight:800; letter-spacing:.3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
   background:linear-gradient(100deg,var(--emerald-bright) 20%,#fff 40%,var(--gold-bright) 55%,var(--emerald-bright) 75%);
   background-size:220% 100%; -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
   animation:titleShine 7s linear infinite;}
 @keyframes titleShine{0%{background-position:0% 0;}100%{background-position:220% 0;}}
-.brand-sub{font-size:12.5px; color:var(--muted); margin-top:1px;}
-.clockbox{text-align:right; flex-shrink:0;}
-.clock{font-size:19px; font-weight:700; font-variant-numeric:tabular-nums;}
-.date{font-size:11.5px; color:var(--gold-bright);}
+.tb-subrow{display:flex; align-items:flex-start; gap:10px; margin-top:2px;}
+.brand-sub{flex:1; min-width:0; font-size:12.5px; color:var(--muted); line-height:1.35;}
+.tb-clock{flex-shrink:0; white-space:nowrap; text-align:right;}
+.clock{font-size:14.5px; font-weight:700; font-variant-numeric:tabular-nums;}
+.date{font-size:11.5px; color:var(--gold-bright); margin-left:5px;}
 
 /* Install button (Effect 5 ripple host) */
 .install-btn{
@@ -101,10 +103,12 @@ button:focus-visible, input:focus-visible, [tabindex]:focus-visible{
   padding:9px 10px; background:rgba(2,6,23,.5);
   border:1px solid var(--line); border-radius:14px; overflow-x:auto; scrollbar-width:none;
   animation:wxIn .6s ease both;
+  -webkit-mask-image:linear-gradient(90deg,#000 93%,transparent 100%);
+  mask-image:linear-gradient(90deg,#000 93%,transparent 100%);
 }
 .weather::-webkit-scrollbar{display:none;}
 @keyframes wxIn{from{opacity:0; transform:translateY(-10px);}to{opacity:1; transform:none;}}
-.wx-now{display:flex; flex-direction:column; justify-content:center; min-width:118px;
+.wx-now{display:flex; flex-direction:column; justify-content:center; min-width:108px;
   padding-right:10px; border-right:1px solid var(--line); font-size:14.5px; font-weight:700; line-height:1.35;}
 .wx-now-sub{font-size:11.5px; font-weight:600; color:var(--muted);}
 .wx-days{display:flex; gap:6px; flex:1;}
@@ -147,7 +151,9 @@ button:focus-visible, input:focus-visible, [tabindex]:focus-visible{
   display:flex; align-items:center; justify-content:center;}
 .icon-btn:active{transform:scale(.93);}
 .icon-btn.rec{border-color:var(--danger); color:var(--danger); animation:gemPulse 1s infinite;}
-.chips{display:flex; gap:8px; overflow-x:auto; padding-bottom:4px; scrollbar-width:none;}
+.chips{display:flex; gap:8px; overflow-x:auto; padding-bottom:4px; scrollbar-width:none;
+  -webkit-mask-image:linear-gradient(90deg,#000 94%,transparent 100%);
+  mask-image:linear-gradient(90deg,#000 94%,transparent 100%);}
 .chips::-webkit-scrollbar{display:none;}
 .chip{position:relative; overflow:hidden; flex-shrink:0; border:1px solid var(--line); background:var(--panel);
   color:var(--muted); font-size:13.5px; font-weight:600; padding:8px 13px; border-radius:999px;}
@@ -163,7 +169,13 @@ button:focus-visible, input:focus-visible, [tabindex]:focus-visible{
 /* ---------- Sections & grid (Animation 2: cascade, Animation 8: filter fade) ---------- */
 main{padding:6px 16px 30px;}
 .section-title{font-size:17px; font-weight:800; margin:20px 0 10px; display:flex; align-items:center; gap:8px;}
-.grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(158px,1fr)); gap:14px;}
+.grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(148px,1fr)); gap:14px;}
+@media (max-width:380px){
+  .brand-title{font-size:19px;}
+  .install-btn{font-size:12.5px; padding:8px 11px;}
+  .tile{padding:12px 11px 11px; min-height:150px;}
+  .tile-emoji{width:56px; height:56px; font-size:35px;}
+}
 .grid.fadein{animation:gridIn .35s ease both;}
 @keyframes gridIn{from{opacity:0; transform:translateY(10px);}to{opacity:1; transform:none;}}
 .tile{
@@ -192,9 +204,9 @@ main{padding:6px 16px 30px;}
 .status.LIVE{background:rgba(16,185,129,.18); color:var(--emerald-bright); border:1px solid rgba(16,185,129,.5);}
 .status.PRIVATE{background:rgba(251,191,36,.14); color:var(--gold-bright); border:1px solid rgba(251,191,36,.5);}
 .status.REPO{background:rgba(125,211,252,.13); color:var(--sky); border:1px solid rgba(125,211,252,.45);}
-.tile-actions{position:absolute; top:8px; right:8px; display:flex; gap:5px;}
-.tact{width:30px; height:30px; border-radius:9px; border:1px solid var(--line); background:rgba(2,6,23,.65);
-  color:var(--muted); font-size:13px; display:flex; align-items:center; justify-content:center; padding:0;}
+.tile-actions{display:flex; gap:5px; margin-left:auto;}
+.tact{width:28px; height:28px; border-radius:9px; border:1px solid var(--line); background:rgba(2,6,23,.65);
+  color:var(--muted); font-size:12.5px; display:flex; align-items:center; justify-content:center; padding:0;}
 .tact:active{transform:scale(.9);}
 .tact.fav{color:var(--faint);}
 .tact.fav.on{color:var(--gold-bright); border-color:var(--gold);}
@@ -336,15 +348,14 @@ body.flash-on #flash-exit{display:block; visibility:visible;}
 
 <header class="topbar" id="topbar">
   <div class="tb-row">
-    <div>
+    <div class="brand-wrap">
       <div class="brand-title">💎 N8 Command Deck</div>
-      <div class="brand-sub" id="greeting">Welcome, Nathan</div>
     </div>
     <button class="install-btn" id="install-btn" type="button">📲 Install</button>
-    <div class="clockbox">
-      <div class="clock" id="clock">--:--:--</div>
-      <div class="date" id="date">—</div>
-    </div>
+  </div>
+  <div class="tb-subrow">
+    <div class="brand-sub" id="greeting">Welcome, Nathan</div>
+    <div class="tb-clock"><span class="clock" id="clock">--:--:--</span><span class="date" id="date">—</span></div>
   </div>
   <div class="weather" id="weather" aria-label="Baltimore weather — 7 day forecast">
     <div class="wx-now" id="wx-now">🌡️ Baltimore<br><span class="wx-now-sub">loading…</span></div>
@@ -358,7 +369,7 @@ body.flash-on #flash-exit{display:block; visibility:visible;}
 </header>
 
 <section class="brief" id="brief" aria-label="Daily brief">
-  <div class="b-emoji">🌅</div>
+  <div class="b-emoji" id="brief-emoji">💎</div>
   <div>
     <div class="b-title" id="brief-title">Your daily brief</div>
     <div class="b-line" id="brief-line">Loading today’s picture…</div>
@@ -419,7 +430,7 @@ body.flash-on #flash-exit{display:block; visibility:visible;}
     <input type="file" id="import-file" accept="application/json" hidden>
     <button class="f-btn" id="about-btn" type="button">ℹ️ About</button>
   </div>
-  <div>N8 Command Deck Mobile <span id="ver-line">v1.0.0</span> • Same deck as the Dell, pocket edition.<br>
+  <div>N8 Command Deck Mobile <span id="ver-line">v1.0.1</span> • Same deck as the Dell, pocket edition.<br>
   Laptop-only projects can’t be reached from the phone — everything with a live link is here.</div>
 </footer>
 
@@ -444,7 +455,7 @@ body.flash-on #flash-exit{display:block; visibility:visible;}
 <div class="overlay" id="about-overlay">
   <div class="sheet">
     <h3>ℹ️ About — N8 Command Deck Mobile</h3>
-    <div class="sub">Version <span id="about-ver">1.0.0</span> • Built November 16, 2026 • The pocket twin of the Dell Command Deck — same 83 tiles, same favorites style, saved on this phone.</div>
+    <div class="sub">Version <span id="about-ver">1.0.1</span> • Built November 16, 2026 • The pocket twin of the Dell Command Deck — same 83 tiles, same favorites style, saved on this phone.</div>
     <div class="mp-sec">6 new mobile features</div>
     <ul class="about-list">
       <li><b>📴 Offline-first</b> — the whole deck caches to your phone; it opens and works with no signal.</li>
@@ -504,8 +515,8 @@ body.flash-on #flash-exit{display:block; visibility:visible;}
 
 <script>
 'use strict';
-/* ================= N8 Command Deck Mobile v1.0.0 ================= */
-var VERSION = '1.0.0';
+/* ================= N8 Command Deck Mobile v1.0.1 ================= */
+var VERSION = '1.0.1';
 var TILES = [{"category": "Games & Apps", "desc": "Multiplayer board game — 1-0, race your crew to the finish", "emoji": "🎲", "id": "1poly", "name": "1poly", "status": "LIVE", "url": "https://onepoly.onrender.com"}, {"category": "Games & Apps", "desc": "Spreadsheet studio — templates, formulas, status boards", "emoji": "📊", "id": "n8sheetz", "name": "N8Sheetz", "status": "LIVE", "url": "https://qamotech.github.io/n8sheetz/"}, {"category": "Family & School", "desc": "Basketball training app for Ne'ala — jersey #14", "emoji": "🏀", "id": "neala-hoops", "name": "Ne'ala Hoops #14", "status": "LIVE", "url": "https://qamotech.github.io/nball/"}, {"category": "Games & Apps", "desc": "Thanksgiving gift guide — curated seasonal picks", "emoji": "🦃", "id": "xs-christmas", "name": "XS Thanksgiving Gift Guide", "status": "LIVE", "url": "https://qamotech.github.io/xst/"}, {"category": "Games & Apps", "desc": "Kid games hub — games, art studio & activities for the kids", "emoji": "🕹️", "id": "kidhub-repo", "name": "KidHub", "status": "LIVE", "url": "https://qamotech.github.io/kidhub/"}, {"category": "Dev", "desc": "Browser adventure game — cozy island life sim", "emoji": "🏝️", "id": "puddlewick-repo", "name": "Puddlewick Isle", "status": "LIVE", "url": "https://qamotech.github.io/pi/"}, {"category": "Dev", "desc": "Mentor recordings into practice packs — private repo", "emoji": "🎤", "id": "plan-practice", "name": "Plan Practice", "status": "PRIVATE", "url": "https://github.com/qamotech/pp"}, {"category": "Business", "desc": "Amway MyShop — Nathan & Jishawna's shop", "emoji": "🛍️", "id": "cfp-shop", "name": "Clark Essential Solutions — Shop", "status": "LIVE", "url": "https://www.amway.com/myshop/n8andshawna"}, {"category": "Dev", "desc": "All of qamotech's repos, gists and projects", "emoji": "🐙", "id": "github", "name": "GitHub — qamotech", "status": "LIVE", "url": "https://github.com/qamotech"}, {"category": "Dev", "desc": "Deploys and services — 1poly lives here", "emoji": "🚀", "id": "render", "name": "Render Dashboard", "status": "LIVE", "url": "https://dashboard.render.com"}, {"category": "Quick Links", "desc": "Inbox across all accounts", "emoji": "📧", "id": "gmail", "name": "Gmail", "status": "LIVE", "url": "https://mail.google.com"}, {"category": "Quick Links", "desc": "Files, deliverables and the emoji folders", "emoji": "📁", "id": "drive", "name": "Google Drive", "status": "LIVE", "url": "https://drive.google.com"}, {"category": "Quick Links", "desc": "Schedule, LTD sessions and family events", "emoji": "📅", "id": "calendar", "name": "Google Calendar", "status": "LIVE", "url": "https://calendar.google.com"}, {"category": "Quick Links", "desc": "My Drive landing — the 8 emoji folders, files & deliverables", "emoji": "📂", "id": "drive-folders", "name": "Drive — Emoji Folders", "status": "LIVE", "url": "https://drive.google.com/drive/my-drive"}, {"category": "Dev", "desc": "All qamotech repositories in one list", "emoji": "🗂️", "id": "github-repos", "name": "GitHub — Repos Overview", "status": "LIVE", "url": "https://github.com/qamotech?tab=repositories"}, {"category": "Quick Links", "desc": "Watch & subscriptions — channels Nathan follows", "emoji": "▶️", "id": "youtube", "name": "YouTube", "status": "LIVE", "url": "https://www.youtube.com"}, {"category": "Quick Links", "desc": "Web player — Christian hip-hop, G.O.M. & more", "emoji": "🎵", "id": "spotify", "name": "Spotify", "status": "LIVE", "url": "https://open.spotify.com"}, {"category": "Quick Links", "desc": "G.O.M. — Newest playlist on Spotify (Datin, Bizzle & more)", "emoji": "🎧", "id": "spotify-gom", "name": "G.O.M. — Newest 🎵", "status": "LIVE", "url": "https://open.spotify.com/playlist/3p123cyR8FHEGLgRFFCjeU"}, {"category": "Business", "desc": "Books without the bookkeeper — Clark family bookkeeping", "emoji": "📒", "id": "n8books", "name": "N8Books", "status": "LIVE", "url": "https://qamotech.github.io/n8books/"}, {"category": "Business", "desc": "Crumb to Coin — turn a baked-goods recipe into a food business", "emoji": "🥐", "id": "c2c", "name": "Crumb2Coin", "status": "LIVE", "url": "https://qamotech.github.io/c2c/"}, {"category": "Business", "desc": "App Monetization Starter Pack — 45 browser apps, one $29 pack", "emoji": "💰", "id": "apppack", "name": "App Pack — $29 Store", "status": "LIVE", "url": "https://qamotech.github.io/apppack/"}, {"category": "Business", "desc": "eSpring water filter landing page — Clark Essential Solutions", "emoji": "💧", "id": "esp", "name": "eSpring — Clark Essential Solutions", "status": "LIVE", "url": "https://qamotech.github.io/esp/"}, {"category": "Business", "desc": "Infinite Growth conversation cards — prospecting deck", "emoji": "🃏", "id": "igcd", "name": "Conversation Deck", "status": "LIVE", "url": "https://qamotech.github.io/igcd/"}, {"category": "Dev", "desc": "QMP — web audio workstation: sequencer, synth, pads & bounce", "emoji": "🎚️", "id": "qmp", "name": "Qamelot Media Studio", "status": "LIVE", "url": "https://qamotech.github.io/QMP/"}, {"category": "Dev", "desc": "React + Web Audio production workstation", "emoji": "🎹", "id": "qs", "name": "QS Studio", "status": "LIVE", "url": "https://qamotech.github.io/qs/"}, {"category": "Dev", "desc": "Modular synth & loop studio — sequencing in one page", "emoji": "🌃", "id": "n8loops", "name": "N8 Loops", "status": "LIVE", "url": "https://qamotech.github.io/n8loops/"}, {"category": "Dev", "desc": "The fleet hub — 33 browser tools, games & studios (each one is tiled here too)", "emoji": "🧭", "id": "devdashboard", "name": "DevDashboard", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/"}, {"category": "Dev", "desc": "24 single-file web apps + an in-app index", "emoji": "🧪", "id": "devlab", "name": "DevLab", "status": "LIVE", "url": "https://qamotech.github.io/DevLab/"}, {"category": "Dev", "desc": "Browser CAD & design app with a dark UI", "emoji": "📐", "id": "cadn8", "name": "CADN8", "status": "LIVE", "url": "https://qamotech.github.io/cadn8/"}, {"category": "Dev", "desc": "Browser coding studio — editor, preview & starter templates", "emoji": "⚙️", "id": "coden8r", "name": "CodeN8R", "status": "LIVE", "url": "https://qamotech.github.io/coden8r/"}, {"category": "Dev", "desc": "HTML5 Canvas lab — responsive canvas experiments", "emoji": "🖼️", "id": "canvaslab", "name": "CanvasLab", "status": "LIVE", "url": "https://qamotech.github.io/CanvasLab/"}, {"category": "Dev", "desc": "AI memory & context extender — manage, search and reuse context", "emoji": "🧠", "id": "ai-tooly", "name": "AI Tooly", "status": "LIVE", "url": "https://qamotech.github.io/AI_TOOLY/"}, {"category": "Dev", "desc": "AI workshop app — learning, gallery and text-tool workflows", "emoji": "🔧", "id": "aitool1", "name": "AI Tool 1", "status": "LIVE", "url": "https://qamotech.github.io/aitool1/"}, {"category": "Dev", "desc": "Browser workshop for AI concepts, prompting and app ideas", "emoji": "🛠️", "id": "aiws", "name": "AI Workshop", "status": "LIVE", "url": "https://qamotech.github.io/aiws/"}, {"category": "Dev", "desc": "Interactive guide to AI models, deployment and prompt workflows", "emoji": "🌌", "id": "aug", "name": "AI Universe Guide", "status": "LIVE", "url": "https://qamotech.github.io/aug/"}, {"category": "Dev", "desc": "Interactive browser asset hub", "emoji": "🔐", "id": "ccypher", "name": "C Cypher", "status": "LIVE", "url": "https://qamotech.github.io/ccypher/"}, {"category": "Dev", "desc": "Isometric home & structure designer on canvas", "emoji": "🏗️", "id": "ob3d", "name": "OmniBuild 4D", "status": "LIVE", "url": "https://qamotech.github.io/ob3d/"}, {"category": "Business", "desc": "Inventory counter for beverage lots, filled & empty cans", "emoji": "🥫", "id": "calc", "name": "Calc — Lot Counter", "status": "LIVE", "url": "https://qamotech.github.io/calc/"}, {"category": "Business", "desc": "Beverage & custom inventory counting with lot parameters", "emoji": "🔢", "id": "calcun8r", "name": "CalcUN8R", "status": "LIVE", "url": "https://qamotech.github.io/calcun8r/"}, {"category": "Business", "desc": "Barcode & pallet scanning warehouse counter", "emoji": "📦", "id": "palletscan", "name": "PalletScan", "status": "LIVE", "url": "https://qamotech.github.io/PalletScan/"}, {"category": "Business", "desc": "Fleet & logistics dashboard — shipments, dispatch, routes", "emoji": "🚛", "id": "fr8ordr", "name": "Fr8OrdR", "status": "LIVE", "url": "https://qamotech.github.io/Fr8OrdR/"}, {"category": "Business", "desc": "Paint-record prototype — track properties & paint jobs", "emoji": "🏷️", "id": "painttag", "name": "PaintTag", "status": "LIVE", "url": "https://qamotech.github.io/PaintTag/"}, {"category": "Business", "desc": "Painting services site — Lak's New Perspective Painting LLC", "emoji": "🖌️", "id": "npp", "name": "New Perspective Painting", "status": "LIVE", "url": "https://qamotech.github.io/npp/"}, {"category": "Business", "desc": "Natural-hair studio site — services & appointment booking", "emoji": "📍", "id": "lmi", "name": "Loc Me In", "status": "LIVE", "url": "https://qamotech.github.io/lmi/"}, {"category": "Business", "desc": "Web design & build portfolio — nonprofit, bookstore & church samples", "emoji": "💼", "id": "web-portfolio", "name": "Web Portfolio", "status": "LIVE", "url": "https://qamotech.github.io/web-portfolio/"}, {"category": "Family & School", "desc": "Magic School Bus science classroom — dashboards, labs & worksheets", "emoji": "🚌", "id": "msb", "name": "MSB Science", "status": "LIVE", "url": "https://qamotech.github.io/msb/"}, {"category": "Family & School", "desc": "Reflection planner — family, spiritual life, health & goals", "emoji": "🌱", "id": "cflife", "name": "CF Life Planner", "status": "LIVE", "url": "https://qamotech.github.io/cflife/"}, {"category": "Games & Apps", "desc": "Family pretend-play browser world — home, garden & market", "emoji": "🏡", "id": "wondertown", "name": "Wondertown Stories", "status": "LIVE", "url": "https://qamotech.github.io/wondertown/"}, {"category": "Games & Apps", "desc": "Sega Genesis retro arcade combat racer", "emoji": "🏎️", "id": "ccars", "name": "Combat Cars", "status": "LIVE", "url": "https://qamotech.github.io/ccars/"}, {"category": "Games & Apps", "desc": "Browser runner game — Apocalypse 2040", "emoji": "🏃", "id": "ev", "name": "Evony Runner: Apocalypse 2040", "status": "LIVE", "url": "https://qamotech.github.io/ev/"}, {"category": "Games & Apps", "desc": "Holiday gift picks & guide pages", "emoji": "🎄", "id": "xsc", "name": "XS Christmas Gift Guide", "status": "LIVE", "url": "https://qamotech.github.io/xsc/"}, {"category": "Dev", "desc": "Private Unity project repository", "emoji": "🧱", "id": "3ddomin8", "name": "3D DomiN8", "status": "PRIVATE", "url": "https://github.com/qamotech/3dDomiN8"}, {"category": "Dev", "desc": "Project landing repository — no live site yet", "emoji": "🎯", "id": "initi8", "name": "INiti8", "status": "REPO", "url": "https://github.com/qamotech/INiti8"}, {"category": "Dev", "desc": "Adaptive Cyber Analysis Interface — developer studio", "emoji": "🛡️", "id": "dd-acai", "name": "ACAI — Cyber Analysis Interface", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/acai-adaptive-cyber-analysis-interface.html"}, {"category": "Dev", "desc": "Asset hub — developer studio", "emoji": "🗄️", "id": "dd-asset-hub", "name": "N8 Asset Hub Prime", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/n8AHubPrime.html"}, {"category": "Games & Apps", "desc": "Neon conversation lab game", "emoji": "💬", "id": "dd-who-road", "name": "WHO//ROAD — Neon Conversation Lab", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/who-road-convo-lab.html"}, {"category": "Games & Apps", "desc": "Panther arena battler", "emoji": "🐆", "id": "dd-blood-gold", "name": "Blood & Gold: Panther Arena", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/blood-and-gold-panther-arena.html"}, {"category": "Business", "desc": "Tactical utility engine for contractor work", "emoji": "🔨", "id": "dd-tool-belt", "name": "Contractor Tool Belt", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/contractor-tool-belt-tactical-utility-engine.html"}, {"category": "Games & Apps", "desc": "Tower defense — Courage Under Fire", "emoji": "🏰", "id": "dd-qtd", "name": "Qamelot Tower Defense", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/qtd-courage-under-fire.html"}, {"category": "Dev", "desc": "40 CSS visual effects & demos", "emoji": "🎨", "id": "dd-css-visuals", "name": "CSS Visuals Library (40)", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/css-visuals-library-40.html"}, {"category": "Games & Apps", "desc": "Blob fighter — the Royale build", "emoji": "🫧", "id": "dd-blob-bash", "name": "Blob Bash Royale: Ascension", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/blob-bash-royale.html"}, {"category": "Dev", "desc": "Animation studio hub", "emoji": "🪃", "id": "dd-anim-hub", "name": "N8 Animation Hub", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/n8AnimHub.html"}, {"category": "Games & Apps", "desc": "Throwing game — Miyagi style", "emoji": "🥷", "id": "dd-miyagi", "name": "Miyagi Throw!", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/MiyagiThrow.html"}, {"category": "Games & Apps", "desc": "Super Arcade Edition conquest game", "emoji": "👑", "id": "dd-conquest", "name": "Qamelot Conquest: Super Arcade", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/qamelot-conquest-super-arcade-edition.html"}, {"category": "Dev", "desc": "SVG editor & sandbox", "emoji": "✒️", "id": "dd-svg-sandbox", "name": "SVG Sandbox Studio", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/svg-sandbox-studio.html"}, {"category": "Dev", "desc": "Secure push-to-talk link demo", "emoji": "📡", "id": "dd-ecotechcomm", "name": "EcoTechComm — Secure PTT Link", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/ecotechcomm-secure-ptt-link.html"}, {"category": "Family & School", "desc": "Command your day. Build your future.", "emoji": "🏠", "id": "dd-homehub", "name": "HomeHub", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/homehub.html"}, {"category": "Games & Apps", "desc": "Mecha Strike v5", "emoji": "🤖", "id": "dd-mecha", "name": "Mecha Strike: Transformer Protocol", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/mecha-strike.html"}, {"category": "Dev", "desc": "The AI Context Lab", "emoji": "🧬", "id": "dd-lattice", "name": "Lattice — AI Context Lab", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/lattice-a-the-ai-context-lab.html"}, {"category": "Dev", "desc": "Motion & animation library", "emoji": "🎞️", "id": "dd-motion", "name": "Eco-Tech Motion Library", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/eco-tech-motion-library.html"}, {"category": "Games & Apps", "desc": "Neon pong arcade", "emoji": "🏓", "id": "dd-neon-pong", "name": "Neon Pong", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/neon-pong.html"}, {"category": "Family & School", "desc": "Productivity & biorhythm studio", "emoji": "💓", "id": "dd-pulse", "name": "Pulse — Productivity & Biorhythm", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/pulse-productivity-and-biorhythm-studio.html"}, {"category": "Games & Apps", "desc": "Grail Matrix game", "emoji": "🔺", "id": "dd-tri-nexus", "name": "TRI-NEXUS: Grail Matrix", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/tri-nexus-grail-matrix.html"}, {"category": "Family & School", "desc": "Sci-fi math core drills", "emoji": "🧮", "id": "dd-qamomath", "name": "QamoMathCore // SCI-FI_NEXUS", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/qamomathcore-sci-fi-nexus.html"}, {"category": "Family & School", "desc": "Math core practice", "emoji": "➗", "id": "dd-math-core", "name": "QAMELOT // MATH_CORE", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/qamelot-math-core.html"}, {"category": "Dev", "desc": "Media component studio page", "emoji": "🎬", "id": "dd-media-comp", "name": "Qamelot Media Component", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/qamelot-media-2.html"}, {"category": "Dev", "desc": "Forward Flick Edition media page", "emoji": "🎥", "id": "dd-media-flick", "name": "Qamelot Media — Forward Flick", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/qamelot-media-3.html"}, {"category": "Dev", "desc": "Sprite creation studio", "emoji": "👾", "id": "dd-spriteforge", "name": "SpriteForge Studio", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/spriteforge-studio.html"}, {"category": "Games & Apps", "desc": "Stix Stax Stonz game", "emoji": "🪨", "id": "dd-stix", "name": "Stix Stax Stonz: Cyber Camelot", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/stix-stax-stonz.html"}, {"category": "Dev", "desc": "Task management studio", "emoji": "✅", "id": "dd-task-forge", "name": "Task Forge", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/task-forge.html"}, {"category": "Dev", "desc": "Your browser workbench", "emoji": "🧰", "id": "dd-n8-tools", "name": "N8 Tools", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/n8-tools.html"}, {"category": "Dev", "desc": "Creative media prompt arcade", "emoji": "✨", "id": "dd-funpromptz", "name": "funPromptz", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/funPromptz.html"}, {"category": "Dev", "desc": "Animated AI webbuilding command deck", "emoji": "📝", "id": "dd-masterprompt", "name": "masterPrompt", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/masterPrompt.html"}];
 var CATS = ['Games & Apps','Business','Dev','Family & School','Quick Links'];
 var LS = { fav:'n8cd.favorites', rec:'n8cd.recents', custom:'n8cd.customTiles', set:'n8cd.settings', wx:'n8cd.weather', note:'n8cd.note', todos:'n8cd.todos' };
@@ -612,11 +623,11 @@ function tileEl(tile, idx){
     '<span class="tact" data-act="copy" role="button" aria-label="Copy link">📋</span>' +
     (isCustom(tile.id) ? '<span class="tact" data-act="edit" role="button" aria-label="Edit tile">✏️</span>' : '') +
     '<span class="tact fav' + (fav ? ' on' : '') + '" data-act="fav" role="button" aria-label="Favorite">' + (fav ? '★' : '☆') + '</span></span>';
-  btn.innerHTML = acts +
+  btn.innerHTML =
     '<span class="tile-emoji">' + escapeHtml(tile.emoji || '🔗') + '</span>' +
     '<span class="tile-name">' + highlight(tile.name, query) + '</span>' +
     '<span class="tile-desc">' + escapeHtml(tile.desc || '') + '</span>' +
-    '<span class="tile-meta"><span class="status ' + escapeHtml(tile.status || 'LIVE') + '">' + escapeHtml(tile.status || 'LIVE') + '</span></span>';
+    '<span class="tile-meta"><span class="status ' + escapeHtml(tile.status || 'LIVE') + '">' + escapeHtml(tile.status || 'LIVE') + '</span>' + acts + '</span>';
   btn.addEventListener('click', function(e){
     var actEl = e.target.closest('[data-act]');
     if (actEl){
@@ -827,6 +838,7 @@ var VERSES = [
 function updateBrief(w){
   var now = new Date(), h = now.getHours();
   var part = h < 5 ? 'Night owl mode' : h < 12 ? 'Morning brief' : h < 17 ? 'Afternoon brief' : 'Evening brief';
+  $('brief-emoji').textContent = (h >= 6 && h < 18) ? '☀️' : '🌙';
   $('brief-title').textContent = part + ' — ' + now.toLocaleDateString('en-US', { weekday:'long', month:'long', day:'numeric' });
   var line = 'Your deck is loaded: ' + allTiles().length + ' apps, ' + favorites.length + ' favorites.';
   if (w && w.days && w.days[0]){
@@ -1013,10 +1025,14 @@ setInterval(loadWeather, 30 * 60 * 1000);
 if ('serviceWorker' in navigator){
   navigator.serviceWorker.register('sw.js').catch(function(){});
 }
-addEventListener('load', function(){
-  setTimeout(function(){ $('splash').classList.add('hide'); }, 650);
-});
-setTimeout(function(){ $('splash').classList.add('hide'); }, 2600);
+function hideSplash(){
+  var sp = $('splash');
+  if (!sp || sp.classList.contains('hide')) return;
+  sp.classList.add('hide');
+  setTimeout(function(){ if (sp.parentNode) sp.parentNode.removeChild(sp); }, 650);
+}
+addEventListener('load', function(){ setTimeout(hideSplash, 450); });
+setTimeout(hideSplash, 1800);
 if (new URLSearchParams(location.search).get('surprise') === '1'){
   setTimeout(surpriseMe, 1400);
 }
