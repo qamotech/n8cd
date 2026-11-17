@@ -7,6 +7,10 @@
 <meta name="description" content="N8 Command Deck — Nathan's dashboard for all his apps, links & projects, now on mobile.">
 <meta name="theme-color" content="#0b1226">
 <link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://api.open-meteo.com">
+<link rel="dns-prefetch" href="https://qamotech.github.io">
+<link rel="dns-prefetch" href="https://onepoly.onrender.com">
+<link rel="preload" as="image" href="muse-face.png">
 <link rel="icon" type="image/png" sizes="64x64" href="icons/favicon-64.png?v=2">
 <link rel="shortcut icon" href="favicon.ico?v=2">
 <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
@@ -258,11 +262,12 @@ footer{border-top:1px solid var(--line-soft); margin:8px 16px 0; padding:16px 0 
 #muse-fab{
   position:fixed; right:16px; bottom:calc(18px + var(--sab)); z-index:80;
   width:64px; height:64px; border-radius:50%; border:2px solid var(--gold);
-  padding:0; overflow:hidden; background:#fff;
+  padding:0; background:#fff;
   box-shadow:0 10px 26px rgba(0,0,0,.55), 0 0 0 4px rgba(212,160,23,.18);
-  animation:fabBob 3.4s ease-in-out infinite;
+  animation:fabBob 3.4s ease-in-out 1.45s infinite, fabIn .5s cubic-bezier(.2,.9,.3,1.4) .9s backwards;
 }
-#muse-fab img{width:100%; height:100%; object-fit:cover; display:block;}
+@keyframes fabIn{from{transform:scale(0) rotate(-30deg); opacity:0;}to{transform:scale(1) rotate(0); opacity:1;}}
+#muse-fab img{width:100%; height:100%; object-fit:cover; display:block; border-radius:50%;}
 #muse-fab:active{transform:scale(.92);}
 @keyframes fabBob{0%,100%{transform:translateY(0);}50%{transform:translateY(-7px);}}
 #muse-fab .fab-dot{position:absolute; top:3px; right:3px; width:13px; height:13px; border-radius:50%;
@@ -325,6 +330,105 @@ select.tv-input{width:auto;}
 #flash-exit{position:fixed; inset:auto 16px calc(20px + var(--sab)) 16px; z-index:300; display:none;}
 body.flash-on #flash-exit{display:block; visibility:visible;}
 
+/* ---------- v1.1.0: Aurora backdrop (Effect 11 / Animation 9) ---------- */
+.aurora{position:fixed; inset:0; z-index:0; overflow:hidden; pointer-events:none;}
+.aurora i{position:absolute; border-radius:50%; filter:blur(70px);}
+.aurora i:nth-child(1){width:55vw; height:55vw; background:#10b981; opacity:.15; top:-18vw; left:-14vw; animation:auroraDrift 26s ease-in-out infinite alternate;}
+.aurora i:nth-child(2){width:55vw; height:55vw; background:#1d4ed8; opacity:.15; bottom:-22vw; right:-12vw; animation:auroraDrift 32s ease-in-out infinite alternate-reverse;}
+.aurora i:nth-child(3){width:34vw; height:34vw; background:#d4a017; opacity:.07; top:38%; left:55%; animation:auroraDrift 38s ease-in-out infinite alternate;}
+@keyframes auroraDrift{from{transform:translate(0,0) scale(1);}to{transform:translate(6vw,4vh) scale(1.15);}}
+.topbar{z-index:60;}
+.brief,.controls,main,footer{position:relative; z-index:1;}
+
+/* Animation 10: section reveal on scroll */
+.reveal{opacity:0; transform:translateY(16px); transition:opacity .5s ease, transform .5s ease;}
+.reveal.in{opacity:1; transform:none;}
+.reveal[hidden]{display:none;}
+
+/* Animation 11: weather icon float */
+.wx-day-emoji{animation:wxFloat 3.6s ease-in-out infinite;}
+.wx-day:nth-child(2) .wx-day-emoji{animation-delay:.35s;}
+.wx-day:nth-child(3) .wx-day-emoji{animation-delay:.7s;}
+.wx-day:nth-child(4) .wx-day-emoji{animation-delay:1.05s;}
+.wx-day:nth-child(5) .wx-day-emoji{animation-delay:1.4s;}
+.wx-day:nth-child(6) .wx-day-emoji{animation-delay:1.75s;}
+.wx-day:nth-child(7) .wx-day-emoji{animation-delay:2.1s;}
+@keyframes wxFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-3px);}}
+
+/* Animation 12: Muse FAB pulse ring */
+#muse-fab::after{content:""; position:absolute; inset:-2px; border-radius:50%;
+  border:2px solid rgba(212,160,23,.55); animation:fabRing 3.4s ease-out infinite; pointer-events:none;}
+@keyframes fabRing{0%{transform:scale(1); opacity:.8;}70%{transform:scale(1.45); opacity:0;}100%{transform:scale(1.45); opacity:0;}}
+
+/* Effect 12: brief card glow pulse + slide-in entrance */
+.brief{animation:briefIn .55s ease .1s both, briefGlow 5s ease-in-out 1.2s infinite;}
+@keyframes briefIn{from{opacity:0; transform:translateX(-18px);}to{opacity:1; transform:none;}}
+@keyframes briefGlow{0%,100%{box-shadow:0 0 0 rgba(16,185,129,0);}50%{box-shadow:0 0 24px rgba(16,185,129,.22);}}
+
+/* Effect 13: search focus glow */
+.search-wrap{transition:border-color .2s ease, box-shadow .2s ease;}
+.search-wrap:focus-within{border-color:var(--gold); box-shadow:0 0 0 3px rgba(212,160,23,.25), 0 0 18px rgba(212,160,23,.15);}
+
+/* Effect 14: tile sheen sweep on press */
+.tile::after{content:""; position:absolute; top:0; bottom:0; left:0; width:45%;
+  transform:translateX(-150%) skewX(-18deg);
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.09),transparent); pointer-events:none;}
+.tile:active::after{transform:translateX(300%) skewX(-18deg); transition:transform .55s ease;}
+
+/* ---------- v1.2.0 enhancements ---------- */
+/* Topbar entrance + gold hairline shimmer */
+.topbar{animation:barDrop .5s ease both;}
+@keyframes barDrop{from{transform:translateY(-100%);}to{transform:none;}}
+.topbar::after{content:""; position:absolute; left:0; right:0; bottom:-2px; height:2px;
+  background:linear-gradient(90deg,transparent,var(--gold-bright),transparent);
+  background-size:200% 100%; animation:hairShimmer 4.5s linear infinite; opacity:.65; pointer-events:none;}
+@keyframes hairShimmer{from{background-position:200% 0;}to{background-position:-100% 0;}}
+/* Chip activate pop */
+.chip.active{animation:chipPop .3s ease;}
+@keyframes chipPop{0%{transform:scale(.92);}55%{transform:scale(1.07);}100%{transform:scale(1);}}
+/* Tile launch zoom + favorite gold frame + LIVE glow + winner pulse */
+.tile.launching{animation:tileLaunch .2s ease both;}
+@keyframes tileLaunch{to{transform:scale(1.05); filter:brightness(1.25);}}
+.tile.is-fav{border-color:rgba(212,160,23,.55); box-shadow:0 0 0 1px rgba(212,160,23,.22), 0 6px 18px rgba(0,0,0,.35);}
+.status.LIVE{animation:liveGlow 2.8s ease-in-out infinite;}
+@keyframes liveGlow{0%,100%{box-shadow:0 0 0 rgba(52,211,153,0);}50%{box-shadow:0 0 8px rgba(52,211,153,.45);}}
+.tile.roulette-hit{animation:hitPulse .5s ease-in-out infinite alternate;}
+@keyframes hitPulse{from{transform:scale(1);}to{transform:scale(1.045);}}
+/* Weather NOW icon motion */
+.wx-ic{display:inline-block;}
+.wx-ic.spin{animation:spinSlow 14s linear infinite;}
+.wx-ic.sway{animation:sway 3.6s ease-in-out infinite;}
+@keyframes spinSlow{to{transform:rotate(360deg);}}
+@keyframes sway{0%,100%{transform:translateX(0);}50%{transform:translateX(3px);}}
+.wx-day{cursor:pointer;}
+/* Accent themes + compact density */
+body[data-accent="gold"]{--emerald:#c9930a; --emerald-bright:#fbbf24;}
+body[data-accent="ocean"]{--emerald:#0284c7; --emerald-bright:#38bdf8;}
+body.compact .tile{min-height:134px; padding:11px 11px 10px; gap:5px;}
+body.compact .tile-emoji{width:52px; height:52px; font-size:32px; border-radius:12px;}
+body.compact .tile-desc{font-size:11.5px;}
+.accent-btn[aria-pressed="true"]{border-color:var(--gold); color:var(--gold-bright);}
+/* Scroll progress + back-to-top */
+#scroll-progress{position:fixed; top:0; left:0; height:3px; width:0; z-index:75;
+  background:linear-gradient(90deg,var(--emerald),var(--gold-bright)); box-shadow:0 1px 6px rgba(212,160,23,.5);}
+#to-top{position:fixed; left:16px; bottom:calc(18px + var(--sab)); z-index:79;
+  width:48px; height:48px; border-radius:50%; border:1px solid var(--line);
+  background:rgba(17,28,58,.92); color:var(--text); font-size:19px;
+  opacity:0; visibility:hidden; transform:translateY(10px); transition:opacity .25s, transform .25s, visibility .25s;}
+#to-top.show{opacity:1; visibility:visible; transform:none;}
+#to-top:active{transform:scale(.92);}
+.brief .b-verse{cursor:pointer;}
+.brief .b-verse:active{opacity:.65;}
+body.shot-mode #to-top{display:none !important;}
+
+/* ---------- Screenshot mode: freeze everything for clean long captures ---------- */
+body.shot-mode *, body.shot-mode *::before, body.shot-mode *::after{animation:none !important; transition:none !important;}
+body.shot-mode .topbar{position:static; backdrop-filter:none; -webkit-backdrop-filter:none;}
+body.shot-mode #muse-fab, body.shot-mode #confetti, body.shot-mode .aurora{display:none !important;}
+body.shot-mode .tile{opacity:1 !important;}
+body.shot-mode .reveal{opacity:1 !important; transform:none !important;}
+body.shot-mode .weather, body.shot-mode .chips{-webkit-mask-image:none; mask-image:none;}
+
 /* ---------- Toasts (Animation 8) + confetti canvas ---------- */
 #toasts{position:fixed; left:16px; right:16px; bottom:calc(96px + var(--sab)); z-index:120;
   display:flex; flex-direction:column; gap:8px; align-items:center; pointer-events:none;}
@@ -338,6 +442,8 @@ body.flash-on #flash-exit{display:block; visibility:visible;}
 </style>
 </head>
 <body>
+
+<div class="aurora" aria-hidden="true"><i></i><i></i><i></i></div>
 
 <div id="splash" aria-hidden="true">
   <div class="gem">💎</div>
@@ -386,6 +492,7 @@ body.flash-on #flash-exit{display:block; visibility:visible;}
   </div>
   <nav class="chips" id="chips">
     <button class="chip active" data-cat="All">All <span class="chip-badge">0</span></button>
+    <button class="chip" data-cat="__fav">⭐ Favorites <span class="chip-badge">0</span></button>
     <button class="chip" data-cat="Games & Apps">🎮 Games & Apps <span class="chip-badge">0</span></button>
     <button class="chip" data-cat="Business">💼 Business <span class="chip-badge">0</span></button>
     <button class="chip" data-cat="Dev">🛠️ Dev <span class="chip-badge">0</span></button>
@@ -399,15 +506,15 @@ body.flash-on #flash-exit{display:block; visibility:visible;}
 </section>
 
 <main id="main">
-  <section id="fav-section" hidden>
+  <section id="fav-section" class="reveal" hidden>
     <h2 class="section-title">⭐ Favorites</h2>
     <div class="grid" id="fav-grid"></div>
   </section>
-  <section id="recent-section" hidden>
+  <section id="recent-section" class="reveal" hidden>
     <h2 class="section-title">🕘 Recently Opened</h2>
     <div class="grid" id="recent-grid"></div>
   </section>
-  <section>
+  <section class="reveal">
     <h2 class="section-title" id="all-title">🗂️ All Apps</h2>
     <div class="grid" id="grid"></div>
     <div class="empty-note" id="empty-note" hidden>No apps match. Try a different search — or tap 🎲 Surprise Me and let fate decide.</div>
@@ -425,12 +532,20 @@ body.flash-on #flash-exit{display:block; visibility:visible;}
     <label class="switch"><input type="checkbox" id="set-weather" checked> Show weather</label>
   </div>
   <div class="f-row">
+    <span style="font-size:13px; color:var(--muted);">Accent:</span>
+    <button class="f-btn accent-btn" data-acc="emerald" type="button">💚 Emerald</button>
+    <button class="f-btn accent-btn" data-acc="gold" type="button">💛 Gold</button>
+    <button class="f-btn accent-btn" data-acc="ocean" type="button">💙 Ocean</button>
+    <button class="f-btn" id="density-btn" type="button">🔤 Density: Comfort</button>
+  </div>
+  <div class="f-row">
     <button class="f-btn" id="export-btn" type="button">💾 Export Deck Data</button>
     <button class="f-btn" id="import-btn" type="button">📥 Import Deck Data</button>
     <input type="file" id="import-file" accept="application/json" hidden>
+    <button class="f-btn" id="share-deck-btn" type="button">📋 Share Deck List</button>
     <button class="f-btn" id="about-btn" type="button">ℹ️ About</button>
   </div>
-  <div>N8 Command Deck Mobile <span id="ver-line">v1.0.1</span> • Same deck as the Dell, pocket edition.<br>
+  <div>N8 Command Deck Mobile <span id="ver-line">v1.2.0</span> • Same deck as the Dell, pocket edition.<br>
   Laptop-only projects can’t be reached from the phone — everything with a live link is here.</div>
 </footer>
 
@@ -455,8 +570,16 @@ body.flash-on #flash-exit{display:block; visibility:visible;}
 <div class="overlay" id="about-overlay">
   <div class="sheet">
     <h3>ℹ️ About — N8 Command Deck Mobile</h3>
-    <div class="sub">Version <span id="about-ver">1.0.1</span> • Built November 16, 2026 • The pocket twin of the Dell Command Deck — same 83 tiles, same favorites style, saved on this phone.</div>
-    <div class="mp-sec">6 new mobile features</div>
+    <div class="sub">Version <span id="about-ver">1.2.0</span> • Built November 16, 2026 • The pocket twin of the Dell Command Deck — same 83 tiles, same favorites style, saved on this phone.</div>
+    <div class="mp-sec">✨ What’s new in 1.2.0 — 24 enhancements</div>
+    <ul class="about-list">
+      <li><b>Links fixed:</b> PaintTag, QS Studio and AI Tool 1 were serving raw code — all three rebuilt and relaunched for real. Loc Me In + New Perspective Painting now go straight to their own domains, and 1poly warns you while its server wakes.</li>
+      <li><b>Features:</b> ⭐ Favorites filter chip • 🌡️ Feels-like temperature • 🌅 Tap any forecast day for details + sunrise/sunset • 🎨 Accent picker (Emerald/Gold/Ocean) • 🔤 Compact density • ⬆️ Back-to-top button • 📋 Share deck list • 📖 Tap the verse to copy it • 📊 “Opened today” counter in your brief • 🔄 Update toast when a new version lands</li>
+      <li><b>Animations:</b> Top-bar drop-in • Brief slide-in • Chip pop • Tile launch zoom • Muse spring entrance • Spinning sun / swaying clouds • Surprise winner pulse</li>
+      <li><b>Effects:</b> Gold hairline shimmer • Gold frame on favorites • Scroll progress bar • LIVE pill glow</li>
+      <li><b>Under the hood:</b> Faster splash exit • Preloaded Muse art + DNS warm-ups • Persistent offline storage</li>
+    </ul>
+    <div class="mp-sec">7 new mobile features</div>
     <ul class="about-list">
       <li><b>📴 Offline-first</b> — the whole deck caches to your phone; it opens and works with no signal.</li>
       <li><b>🎙️ Voice search</b> — tap the mic and say an app’s name.</li>
@@ -464,18 +587,19 @@ body.flash-on #flash-exit{display:block; visibility:visible;}
       <li><b>📌 Home-screen shortcuts</b> — long-press the app icon for N8Books, QMP, KidHub and Surprise Me.</li>
       <li><b>🗓️ Daily Brief</b> — greeting, weather picture and a verse, fresh every day.</li>
       <li><b>🎲 Surprise Me</b> — roulette across your tiles that opens a random app.</li>
+      <li><b>📸 Screenshot mode</b> — in my toolbox: freezes every animation and un-sticks the header so long scrolling screenshots come out clean.</li>
     </ul>
-    <div class="mp-sec">8 animations</div>
+    <div class="mp-sec">12 animations</div>
     <ul class="about-list">
-      <li>Splash gem pulse • Staggered tile cascade • Weather strip slide-in • Favorite star pop &amp; burst • Surprise Me roulette • Muse bot bob &amp; panel spring • Filter fade-slide • Toast slide-up</li>
+      <li>Splash gem pulse • Staggered tile cascade • Weather strip slide-in • Favorite star pop &amp; burst • Surprise Me roulette • Muse bot bob &amp; panel spring • Filter fade-slide • Toast slide-up • Aurora drift • Section reveal on scroll • Weather icon float • Muse ring pulse</li>
     </ul>
-    <div class="mp-sec">10 effects</div>
+    <div class="mp-sec">14 effects</div>
     <ul class="about-list">
-      <li>Emerald tile glow • Gold focus rings • Glass top bar • Animated title shine • Button ripples • Haptic taps • Confetti bursts • Skeleton shimmer loaders • Emoji badge wiggle • Press-spring cards + top-bar scroll shadow</li>
+      <li>Emerald tile glow • Gold focus rings • Glass top bar • Animated title shine • Button ripples • Haptic taps • Confetti bursts • Skeleton shimmer loaders • Emoji badge wiggle • Press-spring cards + top-bar scroll shadow • Aurora backdrop • Brief glow pulse • Search focus glow • Tile sheen sweep</li>
     </ul>
     <div class="mp-sec">Plus</div>
     <ul class="about-list">
-      <li><b>💎N🎱 widget</b> — tap my face (bottom right) for 22 pocket tools and a straight line to chat with me.</li>
+      <li><b>💎N🎱 widget</b> — tap my face (bottom right) for 23 pocket tools and a straight line to chat with me.</li>
       <li><b>📲 Install button</b> — top bar, always there.</li>
     </ul>
     <div class="sheet-actions"><button class="btn primary" id="about-close" type="button">Done</button></div>
@@ -493,7 +617,7 @@ body.flash-on #flash-exit{display:block; visibility:visible;}
     <img src="muse.png" alt="💎N🎱">
     <div>
       <div class="mp-title">💎N🎱 — your Muse</div>
-      <div class="mp-status">In your pocket • 22 tools ready</div>
+      <div class="mp-status">In your pocket • 23 tools ready</div>
     </div>
     <button class="icon-btn mp-close" id="muse-close" type="button" aria-label="Close">✕</button>
   </div>
@@ -509,17 +633,20 @@ body.flash-on #flash-exit{display:block; visibility:visible;}
   </div>
 </div>
 
+<div id="scroll-progress" aria-hidden="true"></div>
+<button id="to-top" type="button" aria-label="Back to top">⬆️</button>
+
 <button class="btn danger" id="flash-exit" type="button">🔦 Turn flashlight off</button>
 <canvas id="confetti" width="0" height="0"></canvas>
 <div id="toasts"></div>
 
 <script>
 'use strict';
-/* ================= N8 Command Deck Mobile v1.0.1 ================= */
-var VERSION = '1.0.1';
-var TILES = [{"category": "Games & Apps", "desc": "Multiplayer board game — 1-0, race your crew to the finish", "emoji": "🎲", "id": "1poly", "name": "1poly", "status": "LIVE", "url": "https://onepoly.onrender.com"}, {"category": "Games & Apps", "desc": "Spreadsheet studio — templates, formulas, status boards", "emoji": "📊", "id": "n8sheetz", "name": "N8Sheetz", "status": "LIVE", "url": "https://qamotech.github.io/n8sheetz/"}, {"category": "Family & School", "desc": "Basketball training app for Ne'ala — jersey #14", "emoji": "🏀", "id": "neala-hoops", "name": "Ne'ala Hoops #14", "status": "LIVE", "url": "https://qamotech.github.io/nball/"}, {"category": "Games & Apps", "desc": "Thanksgiving gift guide — curated seasonal picks", "emoji": "🦃", "id": "xs-christmas", "name": "XS Thanksgiving Gift Guide", "status": "LIVE", "url": "https://qamotech.github.io/xst/"}, {"category": "Games & Apps", "desc": "Kid games hub — games, art studio & activities for the kids", "emoji": "🕹️", "id": "kidhub-repo", "name": "KidHub", "status": "LIVE", "url": "https://qamotech.github.io/kidhub/"}, {"category": "Dev", "desc": "Browser adventure game — cozy island life sim", "emoji": "🏝️", "id": "puddlewick-repo", "name": "Puddlewick Isle", "status": "LIVE", "url": "https://qamotech.github.io/pi/"}, {"category": "Dev", "desc": "Mentor recordings into practice packs — private repo", "emoji": "🎤", "id": "plan-practice", "name": "Plan Practice", "status": "PRIVATE", "url": "https://github.com/qamotech/pp"}, {"category": "Business", "desc": "Amway MyShop — Nathan & Jishawna's shop", "emoji": "🛍️", "id": "cfp-shop", "name": "Clark Essential Solutions — Shop", "status": "LIVE", "url": "https://www.amway.com/myshop/n8andshawna"}, {"category": "Dev", "desc": "All of qamotech's repos, gists and projects", "emoji": "🐙", "id": "github", "name": "GitHub — qamotech", "status": "LIVE", "url": "https://github.com/qamotech"}, {"category": "Dev", "desc": "Deploys and services — 1poly lives here", "emoji": "🚀", "id": "render", "name": "Render Dashboard", "status": "LIVE", "url": "https://dashboard.render.com"}, {"category": "Quick Links", "desc": "Inbox across all accounts", "emoji": "📧", "id": "gmail", "name": "Gmail", "status": "LIVE", "url": "https://mail.google.com"}, {"category": "Quick Links", "desc": "Files, deliverables and the emoji folders", "emoji": "📁", "id": "drive", "name": "Google Drive", "status": "LIVE", "url": "https://drive.google.com"}, {"category": "Quick Links", "desc": "Schedule, LTD sessions and family events", "emoji": "📅", "id": "calendar", "name": "Google Calendar", "status": "LIVE", "url": "https://calendar.google.com"}, {"category": "Quick Links", "desc": "My Drive landing — the 8 emoji folders, files & deliverables", "emoji": "📂", "id": "drive-folders", "name": "Drive — Emoji Folders", "status": "LIVE", "url": "https://drive.google.com/drive/my-drive"}, {"category": "Dev", "desc": "All qamotech repositories in one list", "emoji": "🗂️", "id": "github-repos", "name": "GitHub — Repos Overview", "status": "LIVE", "url": "https://github.com/qamotech?tab=repositories"}, {"category": "Quick Links", "desc": "Watch & subscriptions — channels Nathan follows", "emoji": "▶️", "id": "youtube", "name": "YouTube", "status": "LIVE", "url": "https://www.youtube.com"}, {"category": "Quick Links", "desc": "Web player — Christian hip-hop, G.O.M. & more", "emoji": "🎵", "id": "spotify", "name": "Spotify", "status": "LIVE", "url": "https://open.spotify.com"}, {"category": "Quick Links", "desc": "G.O.M. — Newest playlist on Spotify (Datin, Bizzle & more)", "emoji": "🎧", "id": "spotify-gom", "name": "G.O.M. — Newest 🎵", "status": "LIVE", "url": "https://open.spotify.com/playlist/3p123cyR8FHEGLgRFFCjeU"}, {"category": "Business", "desc": "Books without the bookkeeper — Clark family bookkeeping", "emoji": "📒", "id": "n8books", "name": "N8Books", "status": "LIVE", "url": "https://qamotech.github.io/n8books/"}, {"category": "Business", "desc": "Crumb to Coin — turn a baked-goods recipe into a food business", "emoji": "🥐", "id": "c2c", "name": "Crumb2Coin", "status": "LIVE", "url": "https://qamotech.github.io/c2c/"}, {"category": "Business", "desc": "App Monetization Starter Pack — 45 browser apps, one $29 pack", "emoji": "💰", "id": "apppack", "name": "App Pack — $29 Store", "status": "LIVE", "url": "https://qamotech.github.io/apppack/"}, {"category": "Business", "desc": "eSpring water filter landing page — Clark Essential Solutions", "emoji": "💧", "id": "esp", "name": "eSpring — Clark Essential Solutions", "status": "LIVE", "url": "https://qamotech.github.io/esp/"}, {"category": "Business", "desc": "Infinite Growth conversation cards — prospecting deck", "emoji": "🃏", "id": "igcd", "name": "Conversation Deck", "status": "LIVE", "url": "https://qamotech.github.io/igcd/"}, {"category": "Dev", "desc": "QMP — web audio workstation: sequencer, synth, pads & bounce", "emoji": "🎚️", "id": "qmp", "name": "Qamelot Media Studio", "status": "LIVE", "url": "https://qamotech.github.io/QMP/"}, {"category": "Dev", "desc": "React + Web Audio production workstation", "emoji": "🎹", "id": "qs", "name": "QS Studio", "status": "LIVE", "url": "https://qamotech.github.io/qs/"}, {"category": "Dev", "desc": "Modular synth & loop studio — sequencing in one page", "emoji": "🌃", "id": "n8loops", "name": "N8 Loops", "status": "LIVE", "url": "https://qamotech.github.io/n8loops/"}, {"category": "Dev", "desc": "The fleet hub — 33 browser tools, games & studios (each one is tiled here too)", "emoji": "🧭", "id": "devdashboard", "name": "DevDashboard", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/"}, {"category": "Dev", "desc": "24 single-file web apps + an in-app index", "emoji": "🧪", "id": "devlab", "name": "DevLab", "status": "LIVE", "url": "https://qamotech.github.io/DevLab/"}, {"category": "Dev", "desc": "Browser CAD & design app with a dark UI", "emoji": "📐", "id": "cadn8", "name": "CADN8", "status": "LIVE", "url": "https://qamotech.github.io/cadn8/"}, {"category": "Dev", "desc": "Browser coding studio — editor, preview & starter templates", "emoji": "⚙️", "id": "coden8r", "name": "CodeN8R", "status": "LIVE", "url": "https://qamotech.github.io/coden8r/"}, {"category": "Dev", "desc": "HTML5 Canvas lab — responsive canvas experiments", "emoji": "🖼️", "id": "canvaslab", "name": "CanvasLab", "status": "LIVE", "url": "https://qamotech.github.io/CanvasLab/"}, {"category": "Dev", "desc": "AI memory & context extender — manage, search and reuse context", "emoji": "🧠", "id": "ai-tooly", "name": "AI Tooly", "status": "LIVE", "url": "https://qamotech.github.io/AI_TOOLY/"}, {"category": "Dev", "desc": "AI workshop app — learning, gallery and text-tool workflows", "emoji": "🔧", "id": "aitool1", "name": "AI Tool 1", "status": "LIVE", "url": "https://qamotech.github.io/aitool1/"}, {"category": "Dev", "desc": "Browser workshop for AI concepts, prompting and app ideas", "emoji": "🛠️", "id": "aiws", "name": "AI Workshop", "status": "LIVE", "url": "https://qamotech.github.io/aiws/"}, {"category": "Dev", "desc": "Interactive guide to AI models, deployment and prompt workflows", "emoji": "🌌", "id": "aug", "name": "AI Universe Guide", "status": "LIVE", "url": "https://qamotech.github.io/aug/"}, {"category": "Dev", "desc": "Interactive browser asset hub", "emoji": "🔐", "id": "ccypher", "name": "C Cypher", "status": "LIVE", "url": "https://qamotech.github.io/ccypher/"}, {"category": "Dev", "desc": "Isometric home & structure designer on canvas", "emoji": "🏗️", "id": "ob3d", "name": "OmniBuild 4D", "status": "LIVE", "url": "https://qamotech.github.io/ob3d/"}, {"category": "Business", "desc": "Inventory counter for beverage lots, filled & empty cans", "emoji": "🥫", "id": "calc", "name": "Calc — Lot Counter", "status": "LIVE", "url": "https://qamotech.github.io/calc/"}, {"category": "Business", "desc": "Beverage & custom inventory counting with lot parameters", "emoji": "🔢", "id": "calcun8r", "name": "CalcUN8R", "status": "LIVE", "url": "https://qamotech.github.io/calcun8r/"}, {"category": "Business", "desc": "Barcode & pallet scanning warehouse counter", "emoji": "📦", "id": "palletscan", "name": "PalletScan", "status": "LIVE", "url": "https://qamotech.github.io/PalletScan/"}, {"category": "Business", "desc": "Fleet & logistics dashboard — shipments, dispatch, routes", "emoji": "🚛", "id": "fr8ordr", "name": "Fr8OrdR", "status": "LIVE", "url": "https://qamotech.github.io/Fr8OrdR/"}, {"category": "Business", "desc": "Paint-record prototype — track properties & paint jobs", "emoji": "🏷️", "id": "painttag", "name": "PaintTag", "status": "LIVE", "url": "https://qamotech.github.io/PaintTag/"}, {"category": "Business", "desc": "Painting services site — Lak's New Perspective Painting LLC", "emoji": "🖌️", "id": "npp", "name": "New Perspective Painting", "status": "LIVE", "url": "https://qamotech.github.io/npp/"}, {"category": "Business", "desc": "Natural-hair studio site — services & appointment booking", "emoji": "📍", "id": "lmi", "name": "Loc Me In", "status": "LIVE", "url": "https://qamotech.github.io/lmi/"}, {"category": "Business", "desc": "Web design & build portfolio — nonprofit, bookstore & church samples", "emoji": "💼", "id": "web-portfolio", "name": "Web Portfolio", "status": "LIVE", "url": "https://qamotech.github.io/web-portfolio/"}, {"category": "Family & School", "desc": "Magic School Bus science classroom — dashboards, labs & worksheets", "emoji": "🚌", "id": "msb", "name": "MSB Science", "status": "LIVE", "url": "https://qamotech.github.io/msb/"}, {"category": "Family & School", "desc": "Reflection planner — family, spiritual life, health & goals", "emoji": "🌱", "id": "cflife", "name": "CF Life Planner", "status": "LIVE", "url": "https://qamotech.github.io/cflife/"}, {"category": "Games & Apps", "desc": "Family pretend-play browser world — home, garden & market", "emoji": "🏡", "id": "wondertown", "name": "Wondertown Stories", "status": "LIVE", "url": "https://qamotech.github.io/wondertown/"}, {"category": "Games & Apps", "desc": "Sega Genesis retro arcade combat racer", "emoji": "🏎️", "id": "ccars", "name": "Combat Cars", "status": "LIVE", "url": "https://qamotech.github.io/ccars/"}, {"category": "Games & Apps", "desc": "Browser runner game — Apocalypse 2040", "emoji": "🏃", "id": "ev", "name": "Evony Runner: Apocalypse 2040", "status": "LIVE", "url": "https://qamotech.github.io/ev/"}, {"category": "Games & Apps", "desc": "Holiday gift picks & guide pages", "emoji": "🎄", "id": "xsc", "name": "XS Christmas Gift Guide", "status": "LIVE", "url": "https://qamotech.github.io/xsc/"}, {"category": "Dev", "desc": "Private Unity project repository", "emoji": "🧱", "id": "3ddomin8", "name": "3D DomiN8", "status": "PRIVATE", "url": "https://github.com/qamotech/3dDomiN8"}, {"category": "Dev", "desc": "Project landing repository — no live site yet", "emoji": "🎯", "id": "initi8", "name": "INiti8", "status": "REPO", "url": "https://github.com/qamotech/INiti8"}, {"category": "Dev", "desc": "Adaptive Cyber Analysis Interface — developer studio", "emoji": "🛡️", "id": "dd-acai", "name": "ACAI — Cyber Analysis Interface", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/acai-adaptive-cyber-analysis-interface.html"}, {"category": "Dev", "desc": "Asset hub — developer studio", "emoji": "🗄️", "id": "dd-asset-hub", "name": "N8 Asset Hub Prime", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/n8AHubPrime.html"}, {"category": "Games & Apps", "desc": "Neon conversation lab game", "emoji": "💬", "id": "dd-who-road", "name": "WHO//ROAD — Neon Conversation Lab", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/who-road-convo-lab.html"}, {"category": "Games & Apps", "desc": "Panther arena battler", "emoji": "🐆", "id": "dd-blood-gold", "name": "Blood & Gold: Panther Arena", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/blood-and-gold-panther-arena.html"}, {"category": "Business", "desc": "Tactical utility engine for contractor work", "emoji": "🔨", "id": "dd-tool-belt", "name": "Contractor Tool Belt", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/contractor-tool-belt-tactical-utility-engine.html"}, {"category": "Games & Apps", "desc": "Tower defense — Courage Under Fire", "emoji": "🏰", "id": "dd-qtd", "name": "Qamelot Tower Defense", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/qtd-courage-under-fire.html"}, {"category": "Dev", "desc": "40 CSS visual effects & demos", "emoji": "🎨", "id": "dd-css-visuals", "name": "CSS Visuals Library (40)", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/css-visuals-library-40.html"}, {"category": "Games & Apps", "desc": "Blob fighter — the Royale build", "emoji": "🫧", "id": "dd-blob-bash", "name": "Blob Bash Royale: Ascension", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/blob-bash-royale.html"}, {"category": "Dev", "desc": "Animation studio hub", "emoji": "🪃", "id": "dd-anim-hub", "name": "N8 Animation Hub", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/n8AnimHub.html"}, {"category": "Games & Apps", "desc": "Throwing game — Miyagi style", "emoji": "🥷", "id": "dd-miyagi", "name": "Miyagi Throw!", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/MiyagiThrow.html"}, {"category": "Games & Apps", "desc": "Super Arcade Edition conquest game", "emoji": "👑", "id": "dd-conquest", "name": "Qamelot Conquest: Super Arcade", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/qamelot-conquest-super-arcade-edition.html"}, {"category": "Dev", "desc": "SVG editor & sandbox", "emoji": "✒️", "id": "dd-svg-sandbox", "name": "SVG Sandbox Studio", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/svg-sandbox-studio.html"}, {"category": "Dev", "desc": "Secure push-to-talk link demo", "emoji": "📡", "id": "dd-ecotechcomm", "name": "EcoTechComm — Secure PTT Link", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/ecotechcomm-secure-ptt-link.html"}, {"category": "Family & School", "desc": "Command your day. Build your future.", "emoji": "🏠", "id": "dd-homehub", "name": "HomeHub", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/homehub.html"}, {"category": "Games & Apps", "desc": "Mecha Strike v5", "emoji": "🤖", "id": "dd-mecha", "name": "Mecha Strike: Transformer Protocol", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/mecha-strike.html"}, {"category": "Dev", "desc": "The AI Context Lab", "emoji": "🧬", "id": "dd-lattice", "name": "Lattice — AI Context Lab", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/lattice-a-the-ai-context-lab.html"}, {"category": "Dev", "desc": "Motion & animation library", "emoji": "🎞️", "id": "dd-motion", "name": "Eco-Tech Motion Library", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/eco-tech-motion-library.html"}, {"category": "Games & Apps", "desc": "Neon pong arcade", "emoji": "🏓", "id": "dd-neon-pong", "name": "Neon Pong", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/neon-pong.html"}, {"category": "Family & School", "desc": "Productivity & biorhythm studio", "emoji": "💓", "id": "dd-pulse", "name": "Pulse — Productivity & Biorhythm", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/pulse-productivity-and-biorhythm-studio.html"}, {"category": "Games & Apps", "desc": "Grail Matrix game", "emoji": "🔺", "id": "dd-tri-nexus", "name": "TRI-NEXUS: Grail Matrix", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/tri-nexus-grail-matrix.html"}, {"category": "Family & School", "desc": "Sci-fi math core drills", "emoji": "🧮", "id": "dd-qamomath", "name": "QamoMathCore // SCI-FI_NEXUS", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/qamomathcore-sci-fi-nexus.html"}, {"category": "Family & School", "desc": "Math core practice", "emoji": "➗", "id": "dd-math-core", "name": "QAMELOT // MATH_CORE", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/qamelot-math-core.html"}, {"category": "Dev", "desc": "Media component studio page", "emoji": "🎬", "id": "dd-media-comp", "name": "Qamelot Media Component", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/qamelot-media-2.html"}, {"category": "Dev", "desc": "Forward Flick Edition media page", "emoji": "🎥", "id": "dd-media-flick", "name": "Qamelot Media — Forward Flick", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/qamelot-media-3.html"}, {"category": "Dev", "desc": "Sprite creation studio", "emoji": "👾", "id": "dd-spriteforge", "name": "SpriteForge Studio", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/spriteforge-studio.html"}, {"category": "Games & Apps", "desc": "Stix Stax Stonz game", "emoji": "🪨", "id": "dd-stix", "name": "Stix Stax Stonz: Cyber Camelot", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/stix-stax-stonz.html"}, {"category": "Dev", "desc": "Task management studio", "emoji": "✅", "id": "dd-task-forge", "name": "Task Forge", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/task-forge.html"}, {"category": "Dev", "desc": "Your browser workbench", "emoji": "🧰", "id": "dd-n8-tools", "name": "N8 Tools", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/n8-tools.html"}, {"category": "Dev", "desc": "Creative media prompt arcade", "emoji": "✨", "id": "dd-funpromptz", "name": "funPromptz", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/funPromptz.html"}, {"category": "Dev", "desc": "Animated AI webbuilding command deck", "emoji": "📝", "id": "dd-masterprompt", "name": "masterPrompt", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/masterPrompt.html"}];
+/* ================= N8 Command Deck Mobile v1.2.0 ================= */
+var VERSION = '1.2.0';
+var TILES = [{"category": "Games & Apps", "desc": "Multiplayer board game — race your crew to the finish ⏳ server sleeps: first open can take ~30s", "emoji": "🎲", "id": "1poly", "name": "1poly", "status": "LIVE", "url": "https://onepoly.onrender.com"}, {"category": "Games & Apps", "desc": "Spreadsheet studio — templates, formulas, status boards", "emoji": "📊", "id": "n8sheetz", "name": "N8Sheetz", "status": "LIVE", "url": "https://qamotech.github.io/n8sheetz/"}, {"category": "Family & School", "desc": "Basketball training app for Ne'ala — jersey #14", "emoji": "🏀", "id": "neala-hoops", "name": "Ne'ala Hoops #14", "status": "LIVE", "url": "https://qamotech.github.io/nball/"}, {"category": "Games & Apps", "desc": "Thanksgiving gift guide — curated seasonal picks", "emoji": "🦃", "id": "xs-christmas", "name": "XS Thanksgiving Gift Guide", "status": "LIVE", "url": "https://qamotech.github.io/xst/"}, {"category": "Games & Apps", "desc": "Kid games hub — games, art studio & activities for the kids", "emoji": "🕹️", "id": "kidhub-repo", "name": "KidHub", "status": "LIVE", "url": "https://qamotech.github.io/kidhub/"}, {"category": "Dev", "desc": "Browser adventure game — cozy island life sim", "emoji": "🏝️", "id": "puddlewick-repo", "name": "Puddlewick Isle", "status": "LIVE", "url": "https://qamotech.github.io/pi/"}, {"category": "Dev", "desc": "Mentor recordings into practice packs — private repo", "emoji": "🎤", "id": "plan-practice", "name": "Plan Practice", "status": "PRIVATE", "url": "https://github.com/qamotech/pp"}, {"category": "Business", "desc": "Amway MyShop — Nathan & Jishawna's shop", "emoji": "🛍️", "id": "cfp-shop", "name": "Clark Essential Solutions — Shop", "status": "LIVE", "url": "https://www.amway.com/myshop/n8andshawna"}, {"category": "Dev", "desc": "All of qamotech's repos, gists and projects", "emoji": "🐙", "id": "github", "name": "GitHub — qamotech", "status": "LIVE", "url": "https://github.com/qamotech"}, {"category": "Dev", "desc": "Deploys and services — 1poly lives here", "emoji": "🚀", "id": "render", "name": "Render Dashboard", "status": "LIVE", "url": "https://dashboard.render.com"}, {"category": "Quick Links", "desc": "Inbox across all accounts", "emoji": "📧", "id": "gmail", "name": "Gmail", "status": "LIVE", "url": "https://mail.google.com"}, {"category": "Quick Links", "desc": "Files, deliverables and the emoji folders", "emoji": "📁", "id": "drive", "name": "Google Drive", "status": "LIVE", "url": "https://drive.google.com"}, {"category": "Quick Links", "desc": "Schedule, LTD sessions and family events", "emoji": "📅", "id": "calendar", "name": "Google Calendar", "status": "LIVE", "url": "https://calendar.google.com"}, {"category": "Quick Links", "desc": "My Drive landing — the 8 emoji folders, files & deliverables", "emoji": "📂", "id": "drive-folders", "name": "Drive — Emoji Folders", "status": "LIVE", "url": "https://drive.google.com/drive/my-drive"}, {"category": "Dev", "desc": "All qamotech repositories in one list", "emoji": "🗂️", "id": "github-repos", "name": "GitHub — Repos Overview", "status": "LIVE", "url": "https://github.com/qamotech?tab=repositories"}, {"category": "Quick Links", "desc": "Watch & subscriptions — channels Nathan follows", "emoji": "▶️", "id": "youtube", "name": "YouTube", "status": "LIVE", "url": "https://www.youtube.com"}, {"category": "Quick Links", "desc": "Web player — Christian hip-hop, G.O.M. & more", "emoji": "🎵", "id": "spotify", "name": "Spotify", "status": "LIVE", "url": "https://open.spotify.com"}, {"category": "Quick Links", "desc": "G.O.M. — Newest playlist on Spotify (Datin, Bizzle & more)", "emoji": "🎧", "id": "spotify-gom", "name": "G.O.M. — Newest 🎵", "status": "LIVE", "url": "https://open.spotify.com/playlist/3p123cyR8FHEGLgRFFCjeU"}, {"category": "Business", "desc": "Books without the bookkeeper — Clark family bookkeeping", "emoji": "📒", "id": "n8books", "name": "N8Books", "status": "LIVE", "url": "https://qamotech.github.io/n8books/"}, {"category": "Business", "desc": "Crumb to Coin — turn a baked-goods recipe into a food business", "emoji": "🥐", "id": "c2c", "name": "Crumb2Coin", "status": "LIVE", "url": "https://qamotech.github.io/c2c/"}, {"category": "Business", "desc": "App Monetization Starter Pack — 45 browser apps, one $29 pack", "emoji": "💰", "id": "apppack", "name": "App Pack — $29 Store", "status": "LIVE", "url": "https://qamotech.github.io/apppack/"}, {"category": "Business", "desc": "eSpring water filter landing page — Clark Essential Solutions", "emoji": "💧", "id": "esp", "name": "eSpring — Clark Essential Solutions", "status": "LIVE", "url": "https://qamotech.github.io/esp/"}, {"category": "Business", "desc": "Infinite Growth conversation cards — prospecting deck", "emoji": "🃏", "id": "igcd", "name": "Conversation Deck", "status": "LIVE", "url": "https://qamotech.github.io/igcd/"}, {"category": "Dev", "desc": "QMP — web audio workstation: sequencer, synth, pads & bounce", "emoji": "🎚️", "id": "qmp", "name": "Qamelot Media Studio", "status": "LIVE", "url": "https://qamotech.github.io/QMP/"}, {"category": "Dev", "desc": "React + Web Audio production workstation", "emoji": "🎹", "id": "qs", "name": "QS Studio", "status": "LIVE", "url": "https://qamotech.github.io/qs/"}, {"category": "Dev", "desc": "Modular synth & loop studio — sequencing in one page", "emoji": "🌃", "id": "n8loops", "name": "N8 Loops", "status": "LIVE", "url": "https://qamotech.github.io/n8loops/"}, {"category": "Dev", "desc": "The fleet hub — 33 browser tools, games & studios (each one is tiled here too)", "emoji": "🧭", "id": "devdashboard", "name": "DevDashboard", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/"}, {"category": "Dev", "desc": "24 single-file web apps + an in-app index", "emoji": "🧪", "id": "devlab", "name": "DevLab", "status": "LIVE", "url": "https://qamotech.github.io/DevLab/"}, {"category": "Dev", "desc": "Browser CAD & design app with a dark UI", "emoji": "📐", "id": "cadn8", "name": "CADN8", "status": "LIVE", "url": "https://qamotech.github.io/cadn8/"}, {"category": "Dev", "desc": "Browser coding studio — editor, preview & starter templates", "emoji": "⚙️", "id": "coden8r", "name": "CodeN8R", "status": "LIVE", "url": "https://qamotech.github.io/coden8r/"}, {"category": "Dev", "desc": "HTML5 Canvas lab — responsive canvas experiments", "emoji": "🖼️", "id": "canvaslab", "name": "CanvasLab", "status": "LIVE", "url": "https://qamotech.github.io/CanvasLab/"}, {"category": "Dev", "desc": "AI memory & context extender — manage, search and reuse context", "emoji": "🧠", "id": "ai-tooly", "name": "AI Tooly", "status": "LIVE", "url": "https://qamotech.github.io/AI_TOOLY/"}, {"category": "Dev", "desc": "AI workshop app — learning, gallery and text-tool workflows", "emoji": "🔧", "id": "aitool1", "name": "AI Tool 1", "status": "LIVE", "url": "https://qamotech.github.io/aitool1/"}, {"category": "Dev", "desc": "Browser workshop for AI concepts, prompting and app ideas", "emoji": "🛠️", "id": "aiws", "name": "AI Workshop", "status": "LIVE", "url": "https://qamotech.github.io/aiws/"}, {"category": "Dev", "desc": "Interactive guide to AI models, deployment and prompt workflows", "emoji": "🌌", "id": "aug", "name": "AI Universe Guide", "status": "LIVE", "url": "https://qamotech.github.io/aug/"}, {"category": "Dev", "desc": "Interactive browser asset hub", "emoji": "🔐", "id": "ccypher", "name": "C Cypher", "status": "LIVE", "url": "https://qamotech.github.io/ccypher/"}, {"category": "Dev", "desc": "Isometric home & structure designer on canvas", "emoji": "🏗️", "id": "ob3d", "name": "OmniBuild 4D", "status": "LIVE", "url": "https://qamotech.github.io/ob3d/"}, {"category": "Business", "desc": "Inventory counter for beverage lots, filled & empty cans", "emoji": "🥫", "id": "calc", "name": "Calc — Lot Counter", "status": "LIVE", "url": "https://qamotech.github.io/calc/"}, {"category": "Business", "desc": "Beverage & custom inventory counting with lot parameters", "emoji": "🔢", "id": "calcun8r", "name": "CalcUN8R", "status": "LIVE", "url": "https://qamotech.github.io/calcun8r/"}, {"category": "Business", "desc": "Barcode & pallet scanning warehouse counter", "emoji": "📦", "id": "palletscan", "name": "PalletScan", "status": "LIVE", "url": "https://qamotech.github.io/PalletScan/"}, {"category": "Business", "desc": "Fleet & logistics dashboard — shipments, dispatch, routes", "emoji": "🚛", "id": "fr8ordr", "name": "Fr8OrdR", "status": "LIVE", "url": "https://qamotech.github.io/Fr8OrdR/"}, {"category": "Business", "desc": "Paint-record prototype — track properties & paint jobs", "emoji": "🏷️", "id": "painttag", "name": "PaintTag", "status": "LIVE", "url": "https://qamotech.github.io/PaintTag/"}, {"category": "Business", "desc": "Painting services site — Lak's New Perspective Painting LLC", "emoji": "🖌️", "id": "npp", "name": "New Perspective Painting", "status": "LIVE", "url": "https://newperspectivepaint.com/"}, {"category": "Business", "desc": "Natural-hair studio site — services & appointment booking", "emoji": "📍", "id": "lmi", "name": "Loc Me In", "status": "LIVE", "url": "https://locmein.com/"}, {"category": "Business", "desc": "Web design & build portfolio — nonprofit, bookstore & church samples", "emoji": "💼", "id": "web-portfolio", "name": "Web Portfolio", "status": "LIVE", "url": "https://qamotech.github.io/web-portfolio/"}, {"category": "Family & School", "desc": "Magic School Bus science classroom — dashboards, labs & worksheets", "emoji": "🚌", "id": "msb", "name": "MSB Science", "status": "LIVE", "url": "https://qamotech.github.io/msb/"}, {"category": "Family & School", "desc": "Reflection planner — family, spiritual life, health & goals", "emoji": "🌱", "id": "cflife", "name": "CF Life Planner", "status": "LIVE", "url": "https://qamotech.github.io/cflife/"}, {"category": "Games & Apps", "desc": "Family pretend-play browser world — home, garden & market", "emoji": "🏡", "id": "wondertown", "name": "Wondertown Stories", "status": "LIVE", "url": "https://qamotech.github.io/wondertown/"}, {"category": "Games & Apps", "desc": "Sega Genesis retro arcade combat racer", "emoji": "🏎️", "id": "ccars", "name": "Combat Cars", "status": "LIVE", "url": "https://qamotech.github.io/ccars/"}, {"category": "Games & Apps", "desc": "Browser runner game — Apocalypse 2040", "emoji": "🏃", "id": "ev", "name": "Evony Runner: Apocalypse 2040", "status": "LIVE", "url": "https://qamotech.github.io/ev/"}, {"category": "Games & Apps", "desc": "Holiday gift picks & guide pages", "emoji": "🎄", "id": "xsc", "name": "XS Christmas Gift Guide", "status": "LIVE", "url": "https://qamotech.github.io/xsc/"}, {"category": "Dev", "desc": "Private Unity project repository", "emoji": "🧱", "id": "3ddomin8", "name": "3D DomiN8", "status": "PRIVATE", "url": "https://github.com/qamotech/3dDomiN8"}, {"category": "Dev", "desc": "Project landing repository — no live site yet", "emoji": "🎯", "id": "initi8", "name": "INiti8", "status": "REPO", "url": "https://github.com/qamotech/INiti8"}, {"category": "Dev", "desc": "Adaptive Cyber Analysis Interface — developer studio", "emoji": "🛡️", "id": "dd-acai", "name": "ACAI — Cyber Analysis Interface", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/acai-adaptive-cyber-analysis-interface.html"}, {"category": "Dev", "desc": "Asset hub — developer studio", "emoji": "🗄️", "id": "dd-asset-hub", "name": "N8 Asset Hub Prime", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/n8AHubPrime.html"}, {"category": "Games & Apps", "desc": "Neon conversation lab game", "emoji": "💬", "id": "dd-who-road", "name": "WHO//ROAD — Neon Conversation Lab", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/who-road-convo-lab.html"}, {"category": "Games & Apps", "desc": "Panther arena battler", "emoji": "🐆", "id": "dd-blood-gold", "name": "Blood & Gold: Panther Arena", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/blood-and-gold-panther-arena.html"}, {"category": "Business", "desc": "Tactical utility engine for contractor work", "emoji": "🔨", "id": "dd-tool-belt", "name": "Contractor Tool Belt", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/contractor-tool-belt-tactical-utility-engine.html"}, {"category": "Games & Apps", "desc": "Tower defense — Courage Under Fire", "emoji": "🏰", "id": "dd-qtd", "name": "Qamelot Tower Defense", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/qtd-courage-under-fire.html"}, {"category": "Dev", "desc": "40 CSS visual effects & demos", "emoji": "🎨", "id": "dd-css-visuals", "name": "CSS Visuals Library (40)", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/css-visuals-library-40.html"}, {"category": "Games & Apps", "desc": "Blob fighter — the Royale build", "emoji": "🫧", "id": "dd-blob-bash", "name": "Blob Bash Royale: Ascension", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/blob-bash-royale.html"}, {"category": "Dev", "desc": "Animation studio hub", "emoji": "🪃", "id": "dd-anim-hub", "name": "N8 Animation Hub", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/n8AnimHub.html"}, {"category": "Games & Apps", "desc": "Throwing game — Miyagi style", "emoji": "🥷", "id": "dd-miyagi", "name": "Miyagi Throw!", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/MiyagiThrow.html"}, {"category": "Games & Apps", "desc": "Super Arcade Edition conquest game", "emoji": "👑", "id": "dd-conquest", "name": "Qamelot Conquest: Super Arcade", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/qamelot-conquest-super-arcade-edition.html"}, {"category": "Dev", "desc": "SVG editor & sandbox", "emoji": "✒️", "id": "dd-svg-sandbox", "name": "SVG Sandbox Studio", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/svg-sandbox-studio.html"}, {"category": "Dev", "desc": "Secure push-to-talk link demo", "emoji": "📡", "id": "dd-ecotechcomm", "name": "EcoTechComm — Secure PTT Link", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/ecotechcomm-secure-ptt-link.html"}, {"category": "Family & School", "desc": "Command your day. Build your future.", "emoji": "🏠", "id": "dd-homehub", "name": "HomeHub", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/homehub.html"}, {"category": "Games & Apps", "desc": "Mecha Strike v5", "emoji": "🤖", "id": "dd-mecha", "name": "Mecha Strike: Transformer Protocol", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/mecha-strike.html"}, {"category": "Dev", "desc": "The AI Context Lab", "emoji": "🧬", "id": "dd-lattice", "name": "Lattice — AI Context Lab", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/lattice-a-the-ai-context-lab.html"}, {"category": "Dev", "desc": "Motion & animation library", "emoji": "🎞️", "id": "dd-motion", "name": "Eco-Tech Motion Library", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/eco-tech-motion-library.html"}, {"category": "Games & Apps", "desc": "Neon pong arcade", "emoji": "🏓", "id": "dd-neon-pong", "name": "Neon Pong", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/neon-pong.html"}, {"category": "Family & School", "desc": "Productivity & biorhythm studio", "emoji": "💓", "id": "dd-pulse", "name": "Pulse — Productivity & Biorhythm", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/pulse-productivity-and-biorhythm-studio.html"}, {"category": "Games & Apps", "desc": "Grail Matrix game", "emoji": "🔺", "id": "dd-tri-nexus", "name": "TRI-NEXUS: Grail Matrix", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/tri-nexus-grail-matrix.html"}, {"category": "Family & School", "desc": "Sci-fi math core drills", "emoji": "🧮", "id": "dd-qamomath", "name": "QamoMathCore // SCI-FI_NEXUS", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/qamomathcore-sci-fi-nexus.html"}, {"category": "Family & School", "desc": "Math core practice", "emoji": "➗", "id": "dd-math-core", "name": "QAMELOT // MATH_CORE", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/qamelot-math-core.html"}, {"category": "Dev", "desc": "Media component studio page", "emoji": "🎬", "id": "dd-media-comp", "name": "Qamelot Media Component", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/qamelot-media-2.html"}, {"category": "Dev", "desc": "Forward Flick Edition media page", "emoji": "🎥", "id": "dd-media-flick", "name": "Qamelot Media — Forward Flick", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/qamelot-media-3.html"}, {"category": "Dev", "desc": "Sprite creation studio", "emoji": "👾", "id": "dd-spriteforge", "name": "SpriteForge Studio", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/spriteforge-studio.html"}, {"category": "Games & Apps", "desc": "Stix Stax Stonz game", "emoji": "🪨", "id": "dd-stix", "name": "Stix Stax Stonz: Cyber Camelot", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/stix-stax-stonz.html"}, {"category": "Dev", "desc": "Task management studio", "emoji": "✅", "id": "dd-task-forge", "name": "Task Forge", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/task-forge.html"}, {"category": "Dev", "desc": "Your browser workbench", "emoji": "🧰", "id": "dd-n8-tools", "name": "N8 Tools", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/n8-tools.html"}, {"category": "Dev", "desc": "Creative media prompt arcade", "emoji": "✨", "id": "dd-funpromptz", "name": "funPromptz", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/funPromptz.html"}, {"category": "Dev", "desc": "Animated AI webbuilding command deck", "emoji": "📝", "id": "dd-masterprompt", "name": "masterPrompt", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/masterPrompt.html"}];
 var CATS = ['Games & Apps','Business','Dev','Family & School','Quick Links'];
-var LS = { fav:'n8cd.favorites', rec:'n8cd.recents', custom:'n8cd.customTiles', set:'n8cd.settings', wx:'n8cd.weather', note:'n8cd.note', todos:'n8cd.todos' };
+var LS = { fav:'n8cd.favorites', rec:'n8cd.recents', custom:'n8cd.customTiles', set:'n8cd.settings', wx:'n8cd.weather', note:'n8cd.note', todos:'n8cd.todos', opens:'n8cd.opens' };
 
 function loadJSON(key, fallback){ try { var v = JSON.parse(localStorage.getItem(key)); return (v === null || v === undefined) ? fallback : v; } catch(e){ return fallback; } }
 function saveJSON(key, val){ try { localStorage.setItem(key, JSON.stringify(val)); } catch(e){} }
@@ -579,7 +706,19 @@ document.addEventListener('click', function(e){
 var favorites = loadJSON(LS.fav, []);
 var recents = loadJSON(LS.rec, []);
 var customTiles = loadJSON(LS.custom, []);
-var settings = Object.assign({ newTab:false, weather:true }, loadJSON(LS.set, {}));
+var settings = Object.assign({ newTab:false, weather:true, accent:'emerald', density:'comfort' }, loadJSON(LS.set, {}));
+function opensToday(){
+  var today = new Date().toDateString();
+  var o = loadJSON(LS.opens, null);
+  return (o && o.date === today) ? o.count : 0;
+}
+function bumpOpens(){
+  var today = new Date().toDateString();
+  var o = loadJSON(LS.opens, null);
+  var count = (o && o.date === today) ? o.count + 1 : 1;
+  saveJSON(LS.opens, { date: today, count: count });
+  return count;
+}
 var activeCat = 'All';
 var query = '';
 
@@ -615,8 +754,8 @@ function escapeHtml(s){ return String(s).replace(/[&<>"']/g, function(ch){ retur
 /* ---------- Tile rendering ---------- */
 function tileEl(tile, idx){
   var btn = document.createElement('button');
-  btn.type = 'button'; btn.className = 'tile'; btn.dataset.id = tile.id;
-  btn.style.setProperty('--i', Math.min(idx, 18));
+  btn.type = 'button'; btn.className = 'tile' + (isFav(tile.id) ? ' is-fav' : ''); btn.dataset.id = tile.id;
+  btn.style.setProperty('--i', Math.min(idx, 12));
   var fav = isFav(tile.id);
   var acts = '<span class="tile-actions">' +
     '<span class="tact" data-act="share" role="button" aria-label="Share link">📤</span>' +
@@ -639,7 +778,9 @@ function tileEl(tile, idx){
       else if (act === 'edit') openTileForm(tile.id);
       return;
     }
-    openTile(tile);
+    btn.classList.add('launching');
+    buzz(8);
+    setTimeout(function(){ openTile(tile); }, 170);
   });
   return btn;
 }
@@ -650,6 +791,7 @@ function renderGrid(el, list){
 function render(){
   var tiles = allTiles();
   var counts = { All: tiles.length };
+  counts['__fav'] = favorites.length;
   CATS.forEach(function(c){ counts[c] = tiles.filter(function(t){ return t.category === c; }).length; });
   document.querySelectorAll('#chips .chip').forEach(function(chip){
     var badge = chip.querySelector('.chip-badge');
@@ -662,8 +804,8 @@ function render(){
   var recList = recents.map(tileById).filter(Boolean).filter(function(t){ return matches(t, query) && (activeCat === 'All' || t.category === activeCat); });
   $('recent-section').hidden = recList.length === 0;
   renderGrid($('recent-grid'), recList);
-  var list = tiles.filter(function(t){ return (activeCat === 'All' || t.category === activeCat) && matches(t, query); });
-  $('all-title').textContent = (activeCat === 'All' ? '🗂️ All Apps' : '🗂️ ' + activeCat) + ' — ' + list.length;
+  var list = tiles.filter(function(t){ return (activeCat === 'All' || (activeCat === '__fav' ? favorites.indexOf(t.id) !== -1 : t.category === activeCat)) && matches(t, query); });
+  $('all-title').textContent = (activeCat === 'All' ? '🗂️ All Apps' : activeCat === '__fav' ? '⭐ Favorites' : '🗂️ ' + activeCat) + ' — ' + list.length;
   var grid = $('grid');
   grid.classList.remove('fadein'); void grid.offsetWidth; grid.classList.add('fadein');
   renderGrid(grid, list);
@@ -672,6 +814,8 @@ function render(){
 function openTile(tile){
   recents = [tile.id].concat(recents.filter(function(id){ return id !== tile.id; })).slice(0, 5);
   saveJSON(LS.rec, recents);
+  bumpOpens();
+  if (tile.id === '1poly') toast('⏳ Waking 1poly\u2019s server — first load can take ~30s, hang tight');
   if (settings.newTab) window.open(tile.url, '_blank', 'noopener');
   else window.location.href = tile.url;
   render();
@@ -779,7 +923,8 @@ function renderWeather(w, stale){
   var nowEl = $('wx-now'), daysEl = $('wx-days');
   if (w.now){
     var n = wxIcon(w.now.code);
-    nowEl.innerHTML = n.e + ' Baltimore ' + w.now.temp + '°F<br><span class="wx-now-sub">' + n.label + ' • 💨 ' + w.now.wind + ' mph' + (stale ? ' • offline copy' : '') + '</span>';
+    var motion = (w.now.code === 0 || w.now.code === 1) ? ' spin' : (w.now.code === 2 || w.now.code === 3) ? ' sway' : '';
+    nowEl.innerHTML = '<span class="wx-ic' + motion + '">' + n.e + '</span> Baltimore ' + w.now.temp + '°F<br><span class="wx-now-sub">' + n.label + ' • 💨 ' + w.now.wind + ' mph' + (w.now.feels !== null && w.now.feels !== undefined ? '<br>Feels like ' + w.now.feels + '°' : '') + (stale ? ' • offline copy' : '') + '</span>';
   }
   daysEl.innerHTML = '';
   w.days.forEach(function(day, i){
@@ -793,6 +938,12 @@ function renderWeather(w, stale){
     cell.innerHTML = '<div class="wx-day-name">' + name + '</div><div class="wx-day-emoji">' + ic.e + '</div>' +
       '<div class="wx-day-temps"><span class="wx-hi">' + day.hi + '°</span> <span class="wx-lo">' + day.lo + '°</span></div>' +
       '<div class="wx-day-meta">💧 ' + rain + ' <span class="wx-wind">💨 ' + day.wind + '</span></div>';
+    cell.addEventListener('click', function(){
+      var msg = (i === 0 ? 'Today' : dt.toLocaleDateString('en-US', { weekday:'long' })) + ': ' + ic.e + ' ' + ic.label + ' — high ' + day.hi + '° / low ' + day.lo + '°, rain ' + rain + ', wind 💨 ' + day.wind + ' mph';
+      if (day.rise) msg += ' • 🌅 ' + day.rise + ' 🌇 ' + day.set;
+      toast(msg);
+      buzz(10);
+    });
     daysEl.appendChild(cell);
   });
   updateBrief(w);
@@ -800,18 +951,20 @@ function renderWeather(w, stale){
 function loadWeather(){
   if (!settings.weather){ $('weather').style.display = 'none'; return; }
   $('weather').style.display = '';
-  var url = 'https://api.open-meteo.com/v1/forecast?latitude=39.32&longitude=-76.55&current_weather=true' +
-    '&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,wind_speed_10m_max' +
+  var url = 'https://api.open-meteo.com/v1/forecast?latitude=39.32&longitude=-76.55&current=temperature_2m,weather_code,wind_speed_10m,apparent_temperature' +
+    '&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,wind_speed_10m_max,sunrise,sunset' +
     '&temperature_unit=fahrenheit&wind_speed_unit=mph&timezone=America%2FNew_York&forecast_days=7';
   fetch(url).then(function(r){ return r.json(); }).then(function(j){
     var d = j.daily || {}, times = d.time || [], days = [];
+    var fmtT = function(iso){ if (!iso) return ''; var p = String(iso).split('T')[1] || ''; var hm = p.split(':'); var hh = Number(hm[0]); var ap = hh >= 12 ? 'PM' : 'AM'; hh = hh % 12 || 12; return hh + ':' + hm[1] + ' ' + ap; };
     for (var i = 0; i < times.length; i++){
       days.push({ date: times[i], code: (d.weather_code||[])[i], hi: Math.round((d.temperature_2m_max||[])[i]),
         lo: Math.round((d.temperature_2m_min||[])[i]), rain: (d.precipitation_probability_max||[])[i],
-        wind: Math.round((d.wind_speed_10m_max||[])[i]) });
+        wind: Math.round((d.wind_speed_10m_max||[])[i]), rise: fmtT((d.sunrise||[])[i]), set: fmtT((d.sunset||[])[i]) });
     }
     if (!days.length) throw new Error('empty');
-    var w = { now: j.current_weather ? { temp: Math.round(j.current_weather.temperature), code: j.current_weather.weathercode, wind: Math.round(j.current_weather.windspeed) } : null, days: days };
+    var cur = j.current || (j.current_weather ? { temperature_2m: j.current_weather.temperature, weather_code: j.current_weather.weathercode, wind_speed_10m: j.current_weather.windspeed, apparent_temperature: null } : null);
+    var w = { now: cur ? { temp: Math.round(cur.temperature_2m), code: cur.weather_code, wind: Math.round(cur.wind_speed_10m), feels: (cur.apparent_temperature === null || cur.apparent_temperature === undefined) ? null : Math.round(cur.apparent_temperature) } : null, days: days };
     saveJSON(LS.wx, w);
     renderWeather(w, false);
   }).catch(function(){
@@ -841,6 +994,8 @@ function updateBrief(w){
   $('brief-emoji').textContent = (h >= 6 && h < 18) ? '☀️' : '🌙';
   $('brief-title').textContent = part + ' — ' + now.toLocaleDateString('en-US', { weekday:'long', month:'long', day:'numeric' });
   var line = 'Your deck is loaded: ' + allTiles().length + ' apps, ' + favorites.length + ' favorites.';
+  var opened = opensToday();
+  if (opened > 0) line += ' You\u2019ve opened ' + opened + ' app' + (opened === 1 ? '' : 's') + ' from here today.';
   if (w && w.days && w.days[0]){
     var t = w.days[0], ic = wxIcon(t.code);
     line += ' Today in Baltimore: ' + ic.e + ' ' + ic.label.toLowerCase() + ', high ' + t.hi + '° / low ' + t.lo + '°, rain ' + (t.rain === null || t.rain === undefined ? '—' : t.rain + '%') + '.';
@@ -856,8 +1011,11 @@ function updateBrief(w){
 
 <script>
 /* ================= Deck wiring ================= */
+var searchTimer = null;
 $('search').addEventListener('input', function(){
-  query = this.value; $('search-clear').hidden = !query; render();
+  query = this.value; $('search-clear').hidden = !query;
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(render, 120);
 });
 $('search-clear').addEventListener('click', function(){
   query = ''; $('search').value = ''; this.hidden = true; render(); $('search').focus();
@@ -1013,25 +1171,80 @@ $('install-btn').addEventListener('click', function(){
 if (window.matchMedia('(display-mode: standalone)').matches) $('install-btn').textContent = '✅ Installed';
 
 /* ---------- Top-bar scroll shadow (Effect 10b) ---------- */
-addEventListener('scroll', function(){ $('topbar').classList.toggle('scrolled', scrollY > 8); }, { passive:true });
+addEventListener('scroll', function(){
+  $('topbar').classList.toggle('scrolled', scrollY > 8);
+  var max = document.documentElement.scrollHeight - innerHeight;
+  $('scroll-progress').style.width = (max > 0 ? Math.min(100, scrollY / max * 100) : 0) + '%';
+  $('to-top').classList.toggle('show', scrollY > 600);
+}, { passive:true });
+$('to-top').addEventListener('click', function(){ scrollTo({ top:0, behavior:'smooth' }); });
+
+/* Accent + density settings */
+function applySettings(){
+  document.body.dataset.accent = settings.accent || 'emerald';
+  document.body.classList.toggle('compact', settings.density === 'compact');
+  document.querySelectorAll('.accent-btn').forEach(function(b){ b.setAttribute('aria-pressed', b.dataset.acc === settings.accent ? 'true' : 'false'); });
+  $('density-btn').textContent = '🔤 Density: ' + (settings.density === 'compact' ? 'Compact' : 'Comfort');
+}
+document.querySelectorAll('.accent-btn').forEach(function(b){
+  b.addEventListener('click', function(){ settings.accent = b.dataset.acc; saveJSON(LS.set, settings); applySettings(); toast('🎨 Accent: ' + b.textContent.trim()); });
+});
+$('density-btn').addEventListener('click', function(){
+  settings.density = settings.density === 'compact' ? 'comfort' : 'compact';
+  saveJSON(LS.set, settings); applySettings();
+  toast('🔤 Density: ' + (settings.density === 'compact' ? 'Compact' : 'Comfort'));
+});
+applySettings();
+
+/* Share the whole deck as a text list */
+$('share-deck-btn').addEventListener('click', function(){
+  var text = '💎 N8 Command Deck — my apps\n\n' + allTiles().map(function(t){ return '• ' + t.name + ' — ' + t.url; }).join('\n');
+  if (navigator.share) navigator.share({ title:'N8 Command Deck', text: text }).catch(function(){});
+  else if (navigator.clipboard) navigator.clipboard.writeText(text).then(function(){ toast('📋 Deck list copied — paste it anywhere'); });
+  else toast('Sharing isn\u2019t available in this browser');
+});
+
+/* Tap the brief verse to copy it */
+$('brief-verse').addEventListener('click', function(){
+  var txt = this.textContent.replace(/^📖\s*/, '');
+  if (navigator.clipboard) navigator.clipboard.writeText(txt).then(function(){ toast('📖 Verse copied'); });
+});
 
 /* ---------- Init ---------- */
 $('ver-line').textContent = 'v' + VERSION;
 $('about-ver').textContent = VERSION;
 render();
+if ('IntersectionObserver' in window){
+  var revealIO = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){ if (en.isIntersecting){ en.target.classList.add('in'); revealIO.unobserve(en.target); } });
+  }, { threshold: 0.04 });
+  document.querySelectorAll('.reveal').forEach(function(el){ revealIO.observe(el); });
+} else {
+  document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('in'); });
+}
 updateBrief(null);
 loadWeather();
 setInterval(loadWeather, 30 * 60 * 1000);
 if ('serviceWorker' in navigator){
+  var hadController = !!navigator.serviceWorker.controller;
   navigator.serviceWorker.register('sw.js').catch(function(){});
+  if (hadController){
+    var updateToastShown = false;
+    navigator.serviceWorker.addEventListener('controllerchange', function(){
+      if (updateToastShown) return;
+      updateToastShown = true;
+      toast('✨ Deck updated — you\u2019re on the latest version');
+    });
+  }
 }
+if (navigator.storage && navigator.storage.persist) navigator.storage.persist();
+addEventListener('load', function(){ setTimeout(hideSplash, 320); });
 function hideSplash(){
   var sp = $('splash');
   if (!sp || sp.classList.contains('hide')) return;
   sp.classList.add('hide');
   setTimeout(function(){ if (sp.parentNode) sp.parentNode.removeChild(sp); }, 650);
 }
-addEventListener('load', function(){ setTimeout(hideSplash, 450); });
 setTimeout(hideSplash, 1800);
 if (new URLSearchParams(location.search).get('surprise') === '1'){
   setTimeout(surpriseMe, 1400);
@@ -1085,6 +1298,17 @@ var TOOLS = [
     v.innerHTML = '<h4>⭐ Favorites</h4><div class="tv-out">You have <b>' + favorites.length + '</b> favorite' + (favorites.length === 1 ? '' : 's') + ' pinned. Star any tile to add more.</div>' +
     '<div class="tv-row" style="margin-top:10px;"><button class="btn primary" id="tv-favs-go">Show my favorites</button></div>';
     $('tv-favs-go').addEventListener('click', function(){ closePanelAnd(function(){ var s = $('fav-section'); if (!s.hidden) s.scrollIntoView({behavior:'smooth'}); else toast('⭐ No favorites yet — star a tile first'); }); });
+  }},
+  { id:'shot', e:'📸', name:'Screenshot', open:function(v){
+    var on = document.body.classList.contains('shot-mode');
+    v.innerHTML = '<h4>📸 Screenshot mode</h4><div class="tv-out">Long (scrolling) screenshots hate moving parts — animations, the sticky glass header and my floating button smear across the capture. Screenshot mode freezes all of it for one clean full-page grab.</div>' +
+    '<div class="tv-row" style="margin-top:10px;"><button class="btn primary" id="tv-shot-toggle">' + (on ? '▶️ Turn OFF — bring the motion back' : '📸 Turn ON screenshot mode') + '</button></div>' +
+    '<div class="tv-out" style="margin-top:8px;"><span class="muted">When it\u2019s ON: close me with ✕, scroll to the top, and take your long screenshot. Come back here to turn it off.</span></div>';
+    $('tv-shot-toggle').addEventListener('click', function(){
+      var nowOn = document.body.classList.toggle('shot-mode');
+      if (nowOn){ closePanelAnd(function(){ scrollTo(0, 0); toast('📸 Screenshot mode ON — frozen solid for a clean long capture'); }); }
+      else { $('tv-shot-toggle').textContent = '📸 Turn ON screenshot mode'; toast('▶️ Motion restored'); }
+    });
   }},
   { id:'kg', e:'⚖️', name:'KG ⇄ LB', open:function(v){
     v.innerHTML = '<h4>⚖️ KG ⇄ LB converter</h4>' +
