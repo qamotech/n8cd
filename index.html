@@ -23,7 +23,7 @@
   --bg:#0b1226; --bg2:#0f1a38; --panel:#111c3a; --panel2:#0d1730;
   --line:#22335f; --line-soft:#1a2a52;
   --text:#f2f6ff; --muted:#9fb0d8; --faint:#64769f;
-  --emerald:#10b981; --emerald-bright:#34d399;
+  --emerald:#f97316; --emerald-bright:#fb923c;
   --gold:#d4a017; --gold-bright:#fbbf24;
   --sky:#7dd3fc; --danger:#f87171;
   --radius:16px;
@@ -196,7 +196,7 @@ main{padding:6px 16px 30px;}
 .tile-emoji{
   font-size:40px; line-height:1; display:flex; align-items:center; justify-content:center;
   width:64px; height:64px; border-radius:15px;
-  background:radial-gradient(circle at 50% 32%,rgba(16,185,129,.22),rgba(16,185,129,.06));
+  background:linear-gradient(135deg, color-mix(in srgb, var(--emerald) 30%, transparent), color-mix(in srgb, var(--emerald) 6%, transparent) 55%, rgba(255,255,255,.03));
   border:1px solid var(--line);
 }
 .tile:active .tile-emoji{animation:wiggle .4s ease;}
@@ -205,7 +205,7 @@ main{padding:6px 16px 30px;}
 .tile-desc{font-size:12px; color:var(--muted); line-height:1.4; flex:1;}
 .tile-meta{display:flex; align-items:center; gap:6px;}
 .status{font-size:9.5px; font-weight:800; letter-spacing:.6px; padding:2.5px 7px; border-radius:999px;}
-.status.LIVE{background:rgba(16,185,129,.18); color:var(--emerald-bright); border:1px solid rgba(16,185,129,.5);}
+.status.LIVE{background:rgba(249,115,22,.18); color:var(--emerald-bright); border:1px solid rgba(249,115,22,.5);}
 .status.PRIVATE{background:rgba(251,191,36,.14); color:var(--gold-bright); border:1px solid rgba(251,191,36,.5);}
 .status.REPO{background:rgba(125,211,252,.13); color:var(--sky); border:1px solid rgba(125,211,252,.45);}
 .tile-actions{display:flex; gap:5px; margin-left:auto;}
@@ -333,7 +333,7 @@ body.flash-on #flash-exit{display:block; visibility:visible;}
 /* ---------- v1.1.0: Aurora backdrop (Effect 11 / Animation 9) ---------- */
 .aurora{position:fixed; inset:0; z-index:0; overflow:hidden; pointer-events:none;}
 .aurora i{position:absolute; border-radius:50%; filter:blur(70px);}
-.aurora i:nth-child(1){width:55vw; height:55vw; background:#10b981; opacity:.15; top:-18vw; left:-14vw; animation:auroraDrift 26s ease-in-out infinite alternate;}
+.aurora i:nth-child(1){width:55vw; height:55vw; background:#f97316; opacity:.15; top:-18vw; left:-14vw; animation:auroraDrift 26s ease-in-out infinite alternate;}
 .aurora i:nth-child(2){width:55vw; height:55vw; background:#1d4ed8; opacity:.15; bottom:-22vw; right:-12vw; animation:auroraDrift 32s ease-in-out infinite alternate-reverse;}
 .aurora i:nth-child(3){width:34vw; height:34vw; background:#d4a017; opacity:.07; top:38%; left:55%; animation:auroraDrift 38s ease-in-out infinite alternate;}
 @keyframes auroraDrift{from{transform:translate(0,0) scale(1);}to{transform:translate(6vw,4vh) scale(1.15);}}
@@ -386,6 +386,36 @@ body.flash-on #flash-exit{display:block; visibility:visible;}
 /* Chip activate pop */
 .chip.active{animation:chipPop .3s ease;}
 @keyframes chipPop{0%{transform:scale(.92);}55%{transform:scale(1.07);}100%{transform:scale(1);}}
+
+/* ================= v1.3.0 — orange round ================= */
+.aurora i:nth-child(4){width:22vw; height:22vw; background:#f97316; opacity:.12; top:12%; right:16%; animation:emberFloat 17s ease-in-out infinite alternate;}
+@keyframes emberFloat{from{transform:translate(0,0) scale(1);}to{transform:translate(-4vw,6vh) scale(1.25);}}
+#splash .gem{border-radius:50%; animation:gemPulse 1.15s ease-in-out infinite, gemRing 1.6s ease-out infinite;}
+@keyframes gemRing{from{box-shadow:0 0 0 0 rgba(249,115,22,.45);}to{box-shadow:0 0 0 34px rgba(249,115,22,0);}}
+.section-title{position:relative;}
+.section-title::after{content:""; position:absolute; left:0; bottom:-4px; height:2px; width:64px; border-radius:2px; background:linear-gradient(90deg,var(--emerald),transparent); animation:secPulse 3.2s ease-in-out infinite;}
+@keyframes secPulse{0%,100%{opacity:.55;}50%{opacity:1;}}
+.chip.active{animation:chipSpring .45s cubic-bezier(.2,.9,.3,1.4);}
+@keyframes chipSpring{0%{transform:scale(.92);}55%{transform:scale(1.1);}100%{transform:scale(1);}}
+:focus-visible{outline:2px solid var(--emerald-bright); outline-offset:2px;}
+.b-shift{margin-top:9px; font-size:12px; color:var(--muted);}
+.b-shift-bar{height:6px; border-radius:3px; background:rgba(255,255,255,.09); margin-top:4px; overflow:hidden;}
+.b-shift-bar i{display:block; height:100%; border-radius:3px; background:linear-gradient(90deg,var(--emerald),var(--gold-bright)); transition:width .6s ease;}
+.recent-searches{display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin:8px 2px 0;}
+.recent-searches[hidden]{display:none;}
+.rs-label{font-size:12px; color:var(--muted);}
+.rs-chip{border:1px solid var(--line); background:var(--panel); color:var(--text); border-radius:999px; padding:4px 11px; font-size:12.5px; font-weight:600;}
+#sheet{position:fixed; inset:0; z-index:96; background:rgba(2,6,20,.62); display:flex; align-items:flex-end; justify-content:center;}
+#sheet[hidden]{display:none;}
+.sheet-card{background:var(--panel); border:1px solid var(--line); border-bottom:none; border-radius:20px 20px 0 0; width:100%; max-width:520px; padding:18px 16px calc(16px + var(--sab)); animation:sheetUp .28s cubic-bezier(.2,.9,.3,1.15) both;}
+@keyframes sheetUp{from{transform:translateY(46px); opacity:.4;}to{transform:none; opacity:1;}}
+.sheet-name{font-size:16.5px; font-weight:800; margin-bottom:12px; text-align:center;}
+.sheet-grid{display:grid; grid-template-columns:1fr 1fr; gap:9px;}
+.sheet-btn{border:1px solid var(--line); background:var(--panel2); color:var(--text); border-radius:13px; padding:13px 8px; font-size:14.5px; font-weight:700;}
+.sheet-btn.primary{background:var(--emerald); border-color:var(--emerald); color:#1a0e02;}
+.sheet-close{width:100%; margin-top:10px; border:none; background:none; color:var(--muted); font-size:14px; font-weight:700; padding:9px;}
+.toast{border-color:var(--emerald); background:rgba(22,34,74,.94); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);}
+.toast::before{content:""; display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--emerald-bright); margin-right:8px; box-shadow:0 0 8px var(--emerald-bright); vertical-align:1px;}
 /* Tile launch zoom + favorite gold frame + LIVE glow + winner pulse */
 .tile.launching{animation:tileLaunch .2s ease both;}
 @keyframes tileLaunch{to{transform:scale(1.05); filter:brightness(1.25);}}
@@ -445,13 +475,13 @@ body.shot-mode .weather, body.shot-mode .chips{-webkit-mask-image:none; mask-ima
 </head>
 <body>
 
-<div class="aurora" aria-hidden="true"><i></i><i></i><i></i></div>
+<div class="aurora" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
 
 <div id="splash" aria-hidden="true">
   <div class="gem">💎</div>
   <div class="s-title">N8 Command Deck</div>
   <div class="s-bar"><i></i></div>
-  <div class="s-sub">Loading your whole world…</div>
+  <div class="s-sub">Loading your whole world… • v1.3.0</div>
 </div>
 
 <header class="topbar" id="topbar">
@@ -482,6 +512,7 @@ body.shot-mode .weather, body.shot-mode .chips{-webkit-mask-image:none; mask-ima
   <div>
     <div class="b-title" id="brief-title">Your daily brief</div>
     <div class="b-line" id="brief-line">Loading today’s picture…</div>
+    <div class="b-shift" id="brief-shift" hidden><span id="brief-shift-label"></span><div class="b-shift-bar"><i id="brief-shift-fill"></i></div></div>
     <div class="b-verse" id="brief-verse"></div>
   </div>
 </section>
@@ -502,6 +533,7 @@ body.shot-mode .weather, body.shot-mode .chips{-webkit-mask-image:none; mask-ima
     <button class="chip" data-cat="Family & School">🏠 Family & School <span class="chip-badge">0</span></button>
     <button class="chip" data-cat="Quick Links">🔗 Quick Links <span class="chip-badge">0</span></button>
   </nav>
+  <div class="recent-searches" id="recent-searches" hidden></div>
   <div class="ctl-row">
     <button class="ctl-btn gold" id="surprise-btn" type="button">🎲 Surprise Me</button>
     <button class="ctl-btn" id="add-tile-btn" type="button">➕ Add Your Own Tile</button>
@@ -525,6 +557,7 @@ body.shot-mode .weather, body.shot-mode .chips{-webkit-mask-image:none; mask-ima
 </main>
 
 <footer>
+  <div class="f-row"><span id="foot-stats" style="font-size:12.5px; color:var(--muted);"></span></div>
   <div class="f-row sys-line">
     <span id="sys-batt" hidden>🔋 —</span>
     <span id="sys-store" hidden>💾 —</span>
@@ -536,7 +569,7 @@ body.shot-mode .weather, body.shot-mode .chips{-webkit-mask-image:none; mask-ima
   </div>
   <div class="f-row">
     <span style="font-size:13px; color:var(--muted);">Accent:</span>
-    <button class="f-btn accent-btn" data-acc="emerald" type="button">💚 Emerald</button>
+    <button class="f-btn accent-btn" data-acc="orange" type="button">🧡 Orange</button>
     <button class="f-btn accent-btn" data-acc="gold" type="button">💛 Gold</button>
     <button class="f-btn accent-btn" data-acc="ocean" type="button">💙 Ocean</button>
     <button class="f-btn" id="density-btn" type="button">🔤 Density: Comfort</button>
@@ -570,10 +603,23 @@ body.shot-mode .weather, body.shot-mode .chips{-webkit-mask-image:none; mask-ima
 </div>
 
 <!-- About -->
+<div id="sheet" hidden><div class="sheet-card"><div class="sheet-name" id="sheet-name">Tile</div><div class="sheet-grid"><button class="sheet-btn primary" id="sheet-open" type="button">🚀 Open</button><button class="sheet-btn" id="sheet-fav" type="button">⭐ Favorite</button><button class="sheet-btn" id="sheet-copy" type="button">📋 Copy link</button><button class="sheet-btn" id="sheet-share" type="button">📤 Share</button></div><button class="sheet-close" id="sheet-close" type="button">✕ Close</button></div></div>
 <div class="overlay" id="about-overlay">
   <div class="sheet">
     <h3>ℹ️ About — N8 Command Deck Mobile</h3>
-    <div class="sub">Version <span id="about-ver">1.2.2</span> • Built November 16, 2026 • The pocket twin of the Dell Command Deck — same 83 tiles, same favorites style, saved on this phone.</div>
+    <div class="sub">Version <span id="about-ver">1.3.0</span> • Built November 16, 2026 • The pocket twin of the Dell Command Deck — same 83 tiles, same favorites style, saved on this phone.</div>
+    <div class="mp-sec">🧡 New in 1.3.0 — the orange round (24 upgrades)</div>
+    <ul class="about-list">
+      <li><b>Orange accent</b> — the deck's green is now a sunset orange everywhere (chips, badges, LIVE pills, glows); Emerald settings migrate automatically. Gold &amp; Ocean still in the picker.</li>
+      <li><b>Smarter weather</b> — humidity and today's sunrise/sunset in the NOW block; the 3 AM shift line adds wind speed.</li>
+      <li><b>Shift progress bar</b> — the Daily Brief now tracks your 3 AM–12 PM shift with a live progress bar.</li>
+      <li><b>Long-press a tile</b> — hold any tile for a quick-actions sheet: Open, Favorite, Copy link, Share.</li>
+      <li><b>Recent searches</b> — your last 4 searches sit under the search box for one-tap repeats; press <b>/</b> anywhere to jump to search.</li>
+      <li><b>Roulette feels real</b> — Surprise Me now eases out like a wheel slowing down, and it picks from your current filter instead of resetting it.</li>
+      <li><b>Motion &amp; polish</b> — orange ember in the aurora, gradient tile badges, section shimmer lines, chip spring, tile tap ripples, splash ring pulse, redesigned toasts, orange focus rings.</li>
+      <li><b>New Muse tools</b> — 🎨 Accent cycler and 🧹 Reset data join the widget (25 tools total).</li>
+      <li><b>Footer stats</b> — tiles, favorites and today's opens, live at the bottom of the deck.</li>
+    </ul>
     <div class="mp-sec">🌙 New in 1.2.2</div>
     <ul class="about-list">
       <li><b>Shift weather line</b> — the weather strip now shows conditions at your next 3:00 AM shift start (today or tomorrow), right under the forecast.</li>
@@ -604,7 +650,7 @@ body.shot-mode .weather, body.shot-mode .chips{-webkit-mask-image:none; mask-ima
     </ul>
     <div class="mp-sec">14 effects</div>
     <ul class="about-list">
-      <li>Emerald tile glow • Gold focus rings • Glass top bar • Animated title shine • Button ripples • Haptic taps • Confetti bursts • Skeleton shimmer loaders • Emoji badge wiggle • Press-spring cards + top-bar scroll shadow • Aurora backdrop • Brief glow pulse • Search focus glow • Tile sheen sweep</li>
+      <li>Orange tile glow • Gold focus rings • Glass top bar • Animated title shine • Button ripples • Haptic taps • Confetti bursts • Skeleton shimmer loaders • Emoji badge wiggle • Press-spring cards + top-bar scroll shadow • Aurora backdrop • Brief glow pulse • Search focus glow • Tile sheen sweep</li>
     </ul>
     <div class="mp-sec">Plus</div>
     <ul class="about-list">
@@ -652,10 +698,10 @@ body.shot-mode .weather, body.shot-mode .chips{-webkit-mask-image:none; mask-ima
 <script>
 'use strict';
 /* ================= N8 Command Deck Mobile v1.2.2 ================= */
-var VERSION = '1.2.2';
+var VERSION = '1.3.0';
 var TILES = [{"category": "Games & Apps", "desc": "Multiplayer board game — race your crew to the finish ⏳ server sleeps: first open can take ~30s", "emoji": "🎲", "id": "1poly", "name": "1poly", "status": "LIVE", "url": "https://onepoly.onrender.com"}, {"category": "Games & Apps", "desc": "Spreadsheet studio — templates, formulas, status boards", "emoji": "📊", "id": "n8sheetz", "name": "N8Sheetz", "status": "LIVE", "url": "https://qamotech.github.io/n8sheetz/"}, {"category": "Family & School", "desc": "Basketball training app for Ne'ala — jersey #14", "emoji": "🏀", "id": "neala-hoops", "name": "Ne'ala Hoops #14", "status": "LIVE", "url": "https://qamotech.github.io/nball/"}, {"category": "Games & Apps", "desc": "Thanksgiving gift guide — curated seasonal picks", "emoji": "🦃", "id": "xs-christmas", "name": "XS Thanksgiving Gift Guide", "status": "LIVE", "url": "https://qamotech.github.io/xst/"}, {"category": "Games & Apps", "desc": "Kid games hub — games, art studio & activities for the kids", "emoji": "🕹️", "id": "kidhub-repo", "name": "KidHub", "status": "LIVE", "url": "https://qamotech.github.io/kidhub/"}, {"category": "Dev", "desc": "Browser adventure game — cozy island life sim", "emoji": "🏝️", "id": "puddlewick-repo", "name": "Puddlewick Isle", "status": "LIVE", "url": "https://qamotech.github.io/pi/"}, {"category": "Dev", "desc": "Mentor recordings into practice packs — private repo", "emoji": "🎤", "id": "plan-practice", "name": "Plan Practice", "status": "PRIVATE", "url": "https://github.com/qamotech/pp"}, {"category": "Business", "desc": "Amway MyShop — Nathan & Jishawna's shop", "emoji": "🛍️", "id": "cfp-shop", "name": "Clark Essential Solutions — Shop", "status": "LIVE", "url": "https://www.amway.com/myshop/n8andshawna"}, {"category": "Dev", "desc": "All of qamotech's repos, gists and projects", "emoji": "🐙", "id": "github", "name": "GitHub — qamotech", "status": "LIVE", "url": "https://github.com/qamotech"}, {"category": "Dev", "desc": "Deploys and services — 1poly lives here", "emoji": "🚀", "id": "render", "name": "Render Dashboard", "status": "LIVE", "url": "https://dashboard.render.com"}, {"category": "Quick Links", "desc": "Inbox across all accounts", "emoji": "📧", "id": "gmail", "name": "Gmail", "status": "LIVE", "url": "https://mail.google.com"}, {"category": "Quick Links", "desc": "Files, deliverables and the emoji folders", "emoji": "📁", "id": "drive", "name": "Google Drive", "status": "LIVE", "url": "https://drive.google.com"}, {"category": "Quick Links", "desc": "Schedule, LTD sessions and family events", "emoji": "📅", "id": "calendar", "name": "Google Calendar", "status": "LIVE", "url": "https://calendar.google.com"}, {"category": "Quick Links", "desc": "My Drive landing — the 8 emoji folders, files & deliverables", "emoji": "📂", "id": "drive-folders", "name": "Drive — Emoji Folders", "status": "LIVE", "url": "https://drive.google.com/drive/my-drive"}, {"category": "Dev", "desc": "All qamotech repositories in one list", "emoji": "🗂️", "id": "github-repos", "name": "GitHub — Repos Overview", "status": "LIVE", "url": "https://github.com/qamotech?tab=repositories"}, {"category": "Quick Links", "desc": "Watch & subscriptions — channels Nathan follows", "emoji": "▶️", "id": "youtube", "name": "YouTube", "status": "LIVE", "url": "https://www.youtube.com"}, {"category": "Quick Links", "desc": "Web player — Christian hip-hop, G.O.M. & more", "emoji": "🎵", "id": "spotify", "name": "Spotify", "status": "LIVE", "url": "https://open.spotify.com"}, {"category": "Quick Links", "desc": "G.O.M. — Newest playlist on Spotify (Datin, Bizzle & more)", "emoji": "🎧", "id": "spotify-gom", "name": "G.O.M. — Newest 🎵", "status": "LIVE", "url": "https://open.spotify.com/playlist/3p123cyR8FHEGLgRFFCjeU"}, {"category": "Business", "desc": "Books without the bookkeeper — Clark family bookkeeping", "emoji": "📒", "id": "n8books", "name": "N8Books", "status": "LIVE", "url": "https://qamotech.github.io/n8books/"}, {"category": "Business", "desc": "Crumb to Coin — turn a baked-goods recipe into a food business", "emoji": "🥐", "id": "c2c", "name": "Crumb2Coin", "status": "LIVE", "url": "https://qamotech.github.io/c2c/"}, {"category": "Business", "desc": "App Monetization Starter Pack — 45 browser apps, one $29 pack", "emoji": "💰", "id": "apppack", "name": "App Pack — $29 Store", "status": "LIVE", "url": "https://qamotech.github.io/apppack/"}, {"category": "Business", "desc": "eSpring water filter landing page — Clark Essential Solutions", "emoji": "💧", "id": "esp", "name": "eSpring — Clark Essential Solutions", "status": "LIVE", "url": "https://qamotech.github.io/esp/"}, {"category": "Business", "desc": "Infinite Growth conversation cards — prospecting deck", "emoji": "🃏", "id": "igcd", "name": "Conversation Deck", "status": "LIVE", "url": "https://qamotech.github.io/igcd/"}, {"category": "Dev", "desc": "QMP — web audio workstation: sequencer, synth, pads & bounce", "emoji": "🎚️", "id": "qmp", "name": "Qamelot Media Studio", "status": "LIVE", "url": "https://qamotech.github.io/QMP/"}, {"category": "Dev", "desc": "React + Web Audio production workstation", "emoji": "🎹", "id": "qs", "name": "QS Studio", "status": "REPO", "url": "https://github.com/qamotech/qs", "desc": "React + Web Audio production workstation — repo is missing a source file, so the web app can't build yet; tile lands on the repo until it’s restored"}, {"category": "Dev", "desc": "Modular synth & loop studio — sequencing in one page", "emoji": "🌃", "id": "n8loops", "name": "N8 Loops", "status": "LIVE", "url": "https://qamotech.github.io/n8loops/"}, {"category": "Dev", "desc": "The fleet hub — 33 browser tools, games & studios (each one is tiled here too)", "emoji": "🧭", "id": "devdashboard", "name": "DevDashboard", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/"}, {"category": "Dev", "desc": "24 single-file web apps + an in-app index", "emoji": "🧪", "id": "devlab", "name": "DevLab", "status": "LIVE", "url": "https://qamotech.github.io/DevLab/"}, {"category": "Dev", "desc": "Browser CAD & design app with a dark UI", "emoji": "📐", "id": "cadn8", "name": "CADN8", "status": "LIVE", "url": "https://qamotech.github.io/cadn8/"}, {"category": "Dev", "desc": "Browser coding studio — editor, preview & starter templates", "emoji": "⚙️", "id": "coden8r", "name": "CodeN8R", "status": "LIVE", "url": "https://qamotech.github.io/coden8r/"}, {"category": "Dev", "desc": "HTML5 Canvas lab — responsive canvas experiments", "emoji": "🖼️", "id": "canvaslab", "name": "CanvasLab", "status": "LIVE", "url": "https://qamotech.github.io/CanvasLab/"}, {"category": "Dev", "desc": "AI memory & context extender — manage, search and reuse context", "emoji": "🧠", "id": "ai-tooly", "name": "AI Tooly", "status": "LIVE", "url": "https://qamotech.github.io/AI_TOOLY/"}, {"category": "Dev", "desc": "AI workshop app — learning, gallery and text-tool workflows", "emoji": "🔧", "id": "aitool1", "name": "AI Tool 1", "status": "LIVE", "url": "https://qamotech.github.io/aitool1/"}, {"category": "Dev", "desc": "Browser workshop for AI concepts, prompting and app ideas", "emoji": "🛠️", "id": "aiws", "name": "AI Workshop", "status": "LIVE", "url": "https://qamotech.github.io/aiws/"}, {"category": "Dev", "desc": "Interactive guide to AI models, deployment and prompt workflows", "emoji": "🌌", "id": "aug", "name": "AI Universe Guide", "status": "LIVE", "url": "https://qamotech.github.io/aug/"}, {"category": "Dev", "desc": "Interactive browser asset hub", "emoji": "🔐", "id": "ccypher", "name": "C Cypher", "status": "LIVE", "url": "https://qamotech.github.io/ccypher/"}, {"category": "Dev", "desc": "Isometric home & structure designer on canvas", "emoji": "🏗️", "id": "ob3d", "name": "OmniBuild 4D", "status": "LIVE", "url": "https://qamotech.github.io/ob3d/"}, {"category": "Business", "desc": "Inventory counter for beverage lots, filled & empty cans", "emoji": "🥫", "id": "calc", "name": "Calc — Lot Counter", "status": "LIVE", "url": "https://qamotech.github.io/calc/"}, {"category": "Business", "desc": "Beverage & custom inventory counting with lot parameters", "emoji": "🔢", "id": "calcun8r", "name": "CalcUN8R", "status": "LIVE", "url": "https://qamotech.github.io/calcun8r/"}, {"category": "Business", "desc": "Barcode & pallet scanning warehouse counter", "emoji": "📦", "id": "palletscan", "name": "PalletScan", "status": "LIVE", "url": "https://qamotech.github.io/PalletScan/"}, {"category": "Business", "desc": "Fleet & logistics dashboard — shipments, dispatch, routes", "emoji": "🚛", "id": "fr8ordr", "name": "Fr8OrdR", "status": "LIVE", "url": "https://qamotech.github.io/Fr8OrdR/"}, {"category": "Business", "desc": "Paint-record prototype — track properties & paint jobs", "emoji": "🏷️", "id": "painttag", "name": "PaintTag", "status": "LIVE", "url": "https://qamotech.github.io/PaintTag/"}, {"category": "Business", "desc": "Painting services site — Lak's New Perspective Painting LLC", "emoji": "🖌️", "id": "npp", "name": "New Perspective Painting", "status": "LIVE", "url": "https://newperspectivepaint.com/"}, {"category": "Business", "desc": "Natural-hair studio site — services & appointment booking", "emoji": "📍", "id": "lmi", "name": "Loc Me In", "status": "LIVE", "url": "https://locmein.com/"}, {"category": "Business", "desc": "Web design & build portfolio — nonprofit, bookstore & church samples", "emoji": "💼", "id": "web-portfolio", "name": "Web Portfolio", "status": "LIVE", "url": "https://qamotech.github.io/web-portfolio/"}, {"category": "Family & School", "desc": "Magic School Bus science classroom — dashboards, labs & worksheets", "emoji": "🚌", "id": "msb", "name": "MSB Science", "status": "LIVE", "url": "https://qamotech.github.io/msb/"}, {"category": "Family & School", "desc": "Reflection planner — family, spiritual life, health & goals", "emoji": "🌱", "id": "cflife", "name": "CF Life Planner", "status": "LIVE", "url": "https://qamotech.github.io/cflife/"}, {"category": "Games & Apps", "desc": "Family pretend-play browser world — home, garden & market", "emoji": "🏡", "id": "wondertown", "name": "Wondertown Stories", "status": "LIVE", "url": "https://qamotech.github.io/wondertown/"}, {"category": "Games & Apps", "desc": "Sega Genesis retro arcade combat racer", "emoji": "🏎️", "id": "ccars", "name": "Combat Cars", "status": "LIVE", "url": "https://qamotech.github.io/ccars/"}, {"category": "Games & Apps", "desc": "Browser runner game — Apocalypse 2040", "emoji": "🏃", "id": "ev", "name": "Evony Runner: Apocalypse 2040", "status": "LIVE", "url": "https://qamotech.github.io/ev/"}, {"category": "Games & Apps", "desc": "Holiday gift picks & guide pages", "emoji": "🎄", "id": "xsc", "name": "XS Christmas Gift Guide", "status": "LIVE", "url": "https://qamotech.github.io/xsc/"}, {"category": "Dev", "desc": "Private Unity project repository", "emoji": "🧱", "id": "3ddomin8", "name": "3D DomiN8", "status": "PRIVATE", "url": "https://github.com/qamotech/3dDomiN8"}, {"category": "Dev", "desc": "Project landing repository — no live site yet", "emoji": "🎯", "id": "initi8", "name": "INiti8", "status": "REPO", "url": "https://github.com/qamotech/INiti8"}, {"category": "Dev", "desc": "Adaptive Cyber Analysis Interface — developer studio", "emoji": "🛡️", "id": "dd-acai", "name": "ACAI — Cyber Analysis Interface", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/acai-adaptive-cyber-analysis-interface.html"}, {"category": "Dev", "desc": "Asset hub — developer studio", "emoji": "🗄️", "id": "dd-asset-hub", "name": "N8 Asset Hub Prime", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/n8AHubPrime.html"}, {"category": "Games & Apps", "desc": "Neon conversation lab game", "emoji": "💬", "id": "dd-who-road", "name": "WHO//ROAD — Neon Conversation Lab", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/who-road-convo-lab.html"}, {"category": "Games & Apps", "desc": "Panther arena battler", "emoji": "🐆", "id": "dd-blood-gold", "name": "Blood & Gold: Panther Arena", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/blood-and-gold-panther-arena.html"}, {"category": "Business", "desc": "Tactical utility engine for contractor work", "emoji": "🔨", "id": "dd-tool-belt", "name": "Contractor Tool Belt", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/contractor-tool-belt-tactical-utility-engine.html"}, {"category": "Games & Apps", "desc": "Tower defense — Courage Under Fire", "emoji": "🏰", "id": "dd-qtd", "name": "Qamelot Tower Defense", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/qtd-courage-under-fire.html"}, {"category": "Dev", "desc": "40 CSS visual effects & demos", "emoji": "🎨", "id": "dd-css-visuals", "name": "CSS Visuals Library (40)", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/css-visuals-library-40.html"}, {"category": "Games & Apps", "desc": "Blob fighter — the Royale build", "emoji": "🫧", "id": "dd-blob-bash", "name": "Blob Bash Royale: Ascension", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/blob-bash-royale.html"}, {"category": "Dev", "desc": "Animation studio hub", "emoji": "🪃", "id": "dd-anim-hub", "name": "N8 Animation Hub", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/n8AnimHub.html"}, {"category": "Games & Apps", "desc": "Throwing game — Miyagi style", "emoji": "🥷", "id": "dd-miyagi", "name": "Miyagi Throw!", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/MiyagiThrow.html"}, {"category": "Games & Apps", "desc": "Super Arcade Edition conquest game", "emoji": "👑", "id": "dd-conquest", "name": "Qamelot Conquest: Super Arcade", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/qamelot-conquest-super-arcade-edition.html"}, {"category": "Dev", "desc": "SVG editor & sandbox", "emoji": "✒️", "id": "dd-svg-sandbox", "name": "SVG Sandbox Studio", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/svg-sandbox-studio.html"}, {"category": "Dev", "desc": "Secure push-to-talk link demo", "emoji": "📡", "id": "dd-ecotechcomm", "name": "EcoTechComm — Secure PTT Link", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/ecotechcomm-secure-ptt-link.html"}, {"category": "Family & School", "desc": "Command your day. Build your future.", "emoji": "🏠", "id": "dd-homehub", "name": "HomeHub", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/homehub.html"}, {"category": "Games & Apps", "desc": "Mecha Strike v5", "emoji": "🤖", "id": "dd-mecha", "name": "Mecha Strike: Transformer Protocol", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/mecha-strike.html"}, {"category": "Dev", "desc": "The AI Context Lab", "emoji": "🧬", "id": "dd-lattice", "name": "Lattice — AI Context Lab", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/lattice-a-the-ai-context-lab.html"}, {"category": "Dev", "desc": "Motion & animation library", "emoji": "🎞️", "id": "dd-motion", "name": "Eco-Tech Motion Library", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/eco-tech-motion-library.html"}, {"category": "Games & Apps", "desc": "Neon pong arcade", "emoji": "🏓", "id": "dd-neon-pong", "name": "Neon Pong", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/neon-pong.html"}, {"category": "Family & School", "desc": "Productivity & biorhythm studio", "emoji": "💓", "id": "dd-pulse", "name": "Pulse — Productivity & Biorhythm", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/pulse-productivity-and-biorhythm-studio.html"}, {"category": "Games & Apps", "desc": "Grail Matrix game", "emoji": "🔺", "id": "dd-tri-nexus", "name": "TRI-NEXUS: Grail Matrix", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/tri-nexus-grail-matrix.html"}, {"category": "Family & School", "desc": "Sci-fi math core drills", "emoji": "🧮", "id": "dd-qamomath", "name": "QamoMathCore // SCI-FI_NEXUS", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/qamomathcore-sci-fi-nexus.html"}, {"category": "Family & School", "desc": "Math core practice", "emoji": "➗", "id": "dd-math-core", "name": "QAMELOT // MATH_CORE", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/qamelot-math-core.html"}, {"category": "Dev", "desc": "Media component studio page", "emoji": "🎬", "id": "dd-media-comp", "name": "Qamelot Media Component", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/qamelot-media-2.html"}, {"category": "Dev", "desc": "Forward Flick Edition media page", "emoji": "🎥", "id": "dd-media-flick", "name": "Qamelot Media — Forward Flick", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/qamelot-media-3.html"}, {"category": "Dev", "desc": "Sprite creation studio", "emoji": "👾", "id": "dd-spriteforge", "name": "SpriteForge Studio", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/spriteforge-studio.html"}, {"category": "Games & Apps", "desc": "Stix Stax Stonz game", "emoji": "🪨", "id": "dd-stix", "name": "Stix Stax Stonz: Cyber Camelot", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/stix-stax-stonz.html"}, {"category": "Dev", "desc": "Task management studio", "emoji": "✅", "id": "dd-task-forge", "name": "Task Forge", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/task-forge.html"}, {"category": "Dev", "desc": "Your browser workbench", "emoji": "🧰", "id": "dd-n8-tools", "name": "N8 Tools", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/n8-tools.html"}, {"category": "Dev", "desc": "Creative media prompt arcade", "emoji": "✨", "id": "dd-funpromptz", "name": "funPromptz", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/funPromptz.html"}, {"category": "Dev", "desc": "Animated AI webbuilding command deck", "emoji": "📝", "id": "dd-masterprompt", "name": "masterPrompt", "status": "LIVE", "url": "https://qamotech.github.io/DevDashboard/masterPrompt.html"}];
 var CATS = ['Games & Apps','Business','Dev','Family & School','Quick Links'];
-var LS = { fav:'n8cd.favorites', rec:'n8cd.recents', custom:'n8cd.customTiles', set:'n8cd.settings', wx:'n8cd.weather', note:'n8cd.note', todos:'n8cd.todos', opens:'n8cd.opens' };
+var LS = { fav:'n8cd.favorites', rec:'n8cd.recents', custom:'n8cd.customTiles', set:'n8cd.settings', wx:'n8cd.weather', note:'n8cd.note', todos:'n8cd.todos', opens:'n8cd.opens', searches:'n8cd.searches' };
 
 function loadJSON(key, fallback){ try { var v = JSON.parse(localStorage.getItem(key)); return (v === null || v === undefined) ? fallback : v; } catch(e){ return fallback; } }
 function saveJSON(key, val){ try { localStorage.setItem(key, JSON.stringify(val)); } catch(e){} }
@@ -674,7 +720,7 @@ var confettiCtx = null, confettiParts = [], confettiRunning = false;
 function confettiBurst(x, y){
   var c = $('confetti'); c.width = innerWidth; c.height = innerHeight;
   confettiCtx = c.getContext('2d');
-  var colors = ['#34d399','#fbbf24','#7dd3fc','#f2f6ff','#10b981'];
+  var colors = ['#fb923c','#fbbf24','#7dd3fc','#f2f6ff','#f97316'];
   for (var i = 0; i < 42; i++){
     confettiParts.push({ x:x, y:y, vx:(Math.random()-0.5)*11, vy:-Math.random()*10-3,
       s:Math.random()*7+4, r:Math.random()*Math.PI, vr:(Math.random()-0.5)*0.3,
@@ -697,7 +743,7 @@ function confettiTick(){
 
 /* ---------- Ripple (Effect 5) + haptics (Effect 6) ---------- */
 document.addEventListener('pointerdown', function(e){
-  var host = e.target.closest('.install-btn,.chip,.ctl-btn,.f-btn,.btn,.icon-btn,.mp-ask a');
+  var host = e.target.closest('.install-btn,.chip,.ctl-btn,.f-btn,.btn,.icon-btn,.mp-ask a,.tile');
   if (!host) return;
   var rect = host.getBoundingClientRect();
   var rip = document.createElement('span'); rip.className = 'ripple';
@@ -715,7 +761,7 @@ document.addEventListener('click', function(e){
 var favorites = loadJSON(LS.fav, []);
 var recents = loadJSON(LS.rec, []);
 var customTiles = loadJSON(LS.custom, []);
-var settings = Object.assign({ newTab:false, weather:true, accent:'emerald', density:'comfort' }, loadJSON(LS.set, {}));
+var settings = Object.assign({ newTab:false, weather:true, accent:'orange', density:'comfort' }, loadJSON(LS.set, {}));
 function opensToday(){
   var today = new Date().toDateString();
   var o = loadJSON(LS.opens, null);
@@ -774,9 +820,18 @@ function tileEl(tile, idx){
   btn.innerHTML =
     '<span class="tile-emoji">' + escapeHtml(tile.emoji || '🔗') + '</span>' +
     '<span class="tile-name">' + highlight(tile.name, query) + '</span>' +
-    '<span class="tile-desc">' + escapeHtml(tile.desc || '') + '</span>' +
+    '<span class="tile-desc">' + highlight(tile.desc || '', query) + '</span>' +
     '<span class="tile-meta"><span class="status ' + escapeHtml(tile.status || 'LIVE') + '">' + escapeHtml(tile.status || 'LIVE') + '</span>' + acts + '</span>';
+  var lpTimer = null, lpFired = false;
+  btn.addEventListener('pointerdown', function(e){
+    if (e.target.closest('[data-act]')) return;
+    lpFired = false;
+    lpTimer = setTimeout(function(){ lpFired = true; openSheet(tile); }, 550);
+  });
+  ['pointerup','pointerleave','pointercancel'].forEach(function(ev){ btn.addEventListener(ev, function(){ clearTimeout(lpTimer); }); });
+  btn.addEventListener('contextmenu', function(e){ e.preventDefault(); });
   btn.addEventListener('click', function(e){
+    if (lpFired){ lpFired = false; return; }
     var actEl = e.target.closest('[data-act]');
     if (actEl){
       e.stopPropagation();
@@ -819,7 +874,18 @@ function render(){
   grid.classList.remove('fadein'); void grid.offsetWidth; grid.classList.add('fadein');
   renderGrid(grid, list);
   $('empty-note').hidden = list.length !== 0;
+  var fs = $('foot-stats'); if (fs) fs.textContent = tiles.length + ' tiles • ⭐ ' + favorites.length + ' favorites • 🕘 ' + opensToday() + ' opened today • v' + VERSION;
+  renderSearches();
 }
+var sheetTile = null;
+function openSheet(tile){
+  sheetTile = tile;
+  $('sheet-name').textContent = (tile.emoji || '🔗') + ' ' + tile.name;
+  $('sheet-fav').textContent = isFav(tile.id) ? '☆ Unfavorite' : '⭐ Favorite';
+  $('sheet').hidden = false;
+  buzz(15);
+}
+function closeSheet(){ $('sheet').hidden = true; sheetTile = null; }
 function openTile(tile){
   recents = [tile.id].concat(recents.filter(function(id){ return id !== tile.id; })).slice(0, 5);
   saveJSON(LS.rec, recents);
@@ -864,31 +930,35 @@ function shareTile(tile){
 var rouletteTimer = null;
 function surpriseMe(){
   var tiles = allTiles(); if (!tiles.length) return;
-  activeCat = 'All'; query = ''; $('search').value = ''; $('search-clear').hidden = true;
+  var pool = tiles.filter(function(t){ return (activeCat === 'All' || (activeCat === '__fav' ? favorites.indexOf(t.id) !== -1 : t.category === activeCat)) && matches(t, query); });
+  if (!pool.length) pool = tiles;
   render();
   var gridTiles = Array.prototype.slice.call(document.querySelectorAll('#grid .tile'));
-  if (!gridTiles.length) return;
-  var pick = tiles[Math.floor(Math.random() * tiles.length)];
-  var pickEl = gridTiles.filter(function(el){ return el.dataset.id === pick.id; })[0] || gridTiles[0];
+  var pick = pool[Math.floor(Math.random() * pool.length)];
+  if (!gridTiles.length){ openTile(pick); return; }
+  var pickEl = gridTiles.filter(function(el){ return el.dataset.id === pick.id; })[0];
+  if (!pickEl){ pickEl = gridTiles[0]; pick = tileById(pickEl.dataset.id); }
   pickEl.scrollIntoView({ behavior:'smooth', block:'center' });
   var steps = 14 + Math.floor(Math.random() * 6), i = 0;
-  clearInterval(rouletteTimer);
-  rouletteTimer = setInterval(function(){
+  clearTimeout(rouletteTimer);
+  function step(){
     gridTiles.forEach(function(el){ el.classList.remove('roulette-hit'); });
     var el = gridTiles[Math.floor(Math.random() * gridTiles.length)];
     el.classList.add('roulette-hit');
     buzz(6);
     i++;
     if (i >= steps){
-      clearInterval(rouletteTimer);
       gridTiles.forEach(function(el){ el.classList.remove('roulette-hit'); });
       pickEl.classList.add('roulette-hit');
       var r = pickEl.getBoundingClientRect();
       confettiBurst(r.left + r.width/2, Math.max(r.top, 60));
       toast('🎲 Fate picked: ' + pick.name);
       setTimeout(function(){ pickEl.classList.remove('roulette-hit'); openTile(pick); }, 900);
+      return;
     }
-  }, 95);
+    rouletteTimer = setTimeout(step, 55 + Math.pow(i / steps, 2) * 215);
+  }
+  step();
 }
 
 /* ---------- Clock + greeting ---------- */
@@ -898,7 +968,7 @@ function tickClock(){
   var ampm = h >= 12 ? 'PM' : 'AM', h12 = h % 12; if (h12 === 0) h12 = 12;
   $('clock').textContent = h12 + ':' + pad(now.getMinutes()) + ':' + pad(now.getSeconds()) + ' ' + ampm;
   $('date').textContent = now.toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
-  var greet = h < 5 ? 'Burning the midnight oil, Nathan' : h < 12 ? 'Good morning, Nathan' : h < 17 ? 'Good afternoon, Nathan' : 'Good evening, Nathan';
+  var greet = h < 5 ? '🌙 Burning the midnight oil, Nathan' : h < 12 ? '☀️ Good morning, Nathan' : h < 17 ? '🌤️ Good afternoon, Nathan' : '🌆 Good evening, Nathan';
   $('greeting').textContent = greet + ' — everything, one tap away.';
 }
 tickClock(); setInterval(tickClock, 1000);
@@ -933,7 +1003,7 @@ function renderWeather(w, stale){
   if (w.now){
     var n = wxIcon(w.now.code);
     var motion = (w.now.code === 0 || w.now.code === 1) ? ' spin' : (w.now.code === 2 || w.now.code === 3) ? ' sway' : '';
-    nowEl.innerHTML = '<span class="wx-ic' + motion + '">' + n.e + '</span> Baltimore ' + w.now.temp + '°F<br><span class="wx-now-sub">' + n.label + ' • 💨 ' + w.now.wind + ' mph' + (w.now.feels !== null && w.now.feels !== undefined ? '<br>Feels like ' + w.now.feels + '°' : '') + (stale ? ' • offline copy' : '') + '</span>';
+    nowEl.innerHTML = '<span class="wx-ic' + motion + '">' + n.e + '</span> Baltimore ' + w.now.temp + '°F<br><span class="wx-now-sub">' + n.label + ' • 💨 ' + w.now.wind + ' mph' + (w.now.feels !== null && w.now.feels !== undefined ? '<br>Feels like ' + w.now.feels + '°' : '') + (w.now.hum !== null && w.now.hum !== undefined ? ' • 💧 ' + w.now.hum + '% humidity' : '') + (w.days && w.days[0] && w.days[0].rise ? '<br>🌅 ' + w.days[0].rise + ' • 🌇 ' + w.days[0].set : '') + (stale ? ' • offline copy' : '') + '</span>';
   }
   daysEl.innerHTML = '';
   w.days.forEach(function(day, i){
@@ -959,7 +1029,7 @@ function renderWeather(w, stale){
   if (w.shift){
     var sic = wxIcon(w.shift.code);
     var sRain = (w.shift.rain === null || w.shift.rain === undefined) ? '—' : w.shift.rain + '%';
-    shiftEl.innerHTML = '🌙 <b>Shift start — ' + w.shift.when + ' 3:00 AM:</b> ' + sic.e + ' ' + w.shift.temp + '°F, ' + sic.label.toLowerCase() + ', rain ' + sRain;
+    shiftEl.innerHTML = '🌙 <b>Shift start — ' + w.shift.when + ' 3:00 AM:</b> ' + sic.e + ' ' + w.shift.temp + '°F, ' + sic.label.toLowerCase() + ', rain ' + sRain + (w.shift.wind !== null && w.shift.wind !== undefined ? ', 💨 ' + w.shift.wind + ' mph' : '');
     shiftEl.hidden = false;
   } else shiftEl.hidden = true;
   updateBrief(w);
@@ -969,7 +1039,7 @@ function loadWeather(){
   $('weather').style.display = '';
   var url = 'https://api.open-meteo.com/v1/forecast?latitude=39.32&longitude=-76.55&current=temperature_2m,weather_code,wind_speed_10m,apparent_temperature' +
     '&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,wind_speed_10m_max,sunrise,sunset' +
-    '&hourly=temperature_2m,weather_code,precipitation_probability' +
+    '&hourly=temperature_2m,weather_code,precipitation_probability,wind_speed_10m,relative_humidity_2m' +
     '&temperature_unit=fahrenheit&wind_speed_unit=mph&timezone=America%2FNew_York&forecast_days=7';
   fetch(url).then(function(r){ return r.json(); }).then(function(j){
     var d = j.daily || {}, times = d.time || [], days = [];
@@ -990,8 +1060,10 @@ function loadWeather(){
     var pad = function(n){ return (n < 10 ? '0' : '') + n; };
     var key = cand.getFullYear() + '-' + pad(cand.getMonth() + 1) + '-' + pad(cand.getDate()) + 'T03:00';
     var hIdx = htimes.indexOf(key);
-    if (hIdx !== -1) shift = { temp: Math.round((hr.temperature_2m || [])[hIdx]), code: (hr.weather_code || [])[hIdx], rain: (hr.precipitation_probability || [])[hIdx], when: whenLabel };
-    var w = { now: cur ? { temp: Math.round(cur.temperature_2m), code: cur.weather_code, wind: Math.round(cur.wind_speed_10m), feels: (cur.apparent_temperature === null || cur.apparent_temperature === undefined) ? null : Math.round(cur.apparent_temperature) } : null, days: days, shift: shift };
+    if (hIdx !== -1) shift = { temp: Math.round((hr.temperature_2m || [])[hIdx]), code: (hr.weather_code || [])[hIdx], rain: (hr.precipitation_probability || [])[hIdx], wind: Math.round((hr.wind_speed_10m || [])[hIdx]), when: whenLabel };
+    var humIdx = htimes.indexOf(((j.current || {}).time || '').slice(0, 13) + ':00');
+    var hum = humIdx !== -1 ? (hr.relative_humidity_2m || [])[humIdx] : null;
+    var w = { now: cur ? { temp: Math.round(cur.temperature_2m), code: cur.weather_code, wind: Math.round(cur.wind_speed_10m), feels: (cur.apparent_temperature === null || cur.apparent_temperature === undefined) ? null : Math.round(cur.apparent_temperature), hum: hum } : null, days: days, shift: shift };
     saveJSON(LS.wx, w);
     renderWeather(w, false);
   }).catch(function(){
@@ -1033,17 +1105,47 @@ function updateBrief(w){
   $('brief-line').textContent = line;
   var dayIdx = Math.floor(now.getTime() / 86400000) % VERSES.length;
   $('brief-verse').textContent = '📖 “' + VERSES[dayIdx][0] + '” — ' + VERSES[dayIdx][1];
+  var shEl = $('brief-shift'); if (shEl){ var mins = now.getHours() * 60 + now.getMinutes(), s0 = 180, e0 = 720; shEl.hidden = false;
+    if (mins < s0){ $('brief-shift-label').textContent = '🌙 Shift starts today at 3:00 AM — the 3 AM forecast is in the weather strip below.'; $('brief-shift-fill').style.width = '0%'; }
+    else if (mins <= e0){ var pct = Math.round((mins - s0) / (e0 - s0) * 100); $('brief-shift-label').textContent = '🏭 Shift progress — ' + pct + '% through (3 AM–12 PM)'; $('brief-shift-fill').style.width = pct + '%'; }
+    else { $('brief-shift-label').textContent = '✔️ Shift done for today — nice work, Nathan.'; $('brief-shift-fill').style.width = '100%'; } }
 }
 </script>
 
 <script>
 /* ================= Deck wiring ================= */
 var searchTimer = null;
+function saveSearch(q){
+  var arr = loadJSON(LS.searches, []);
+  arr = [q].concat(arr.filter(function(x){ return x.toLowerCase() !== q.toLowerCase(); })).slice(0, 4);
+  saveJSON(LS.searches, arr);
+}
+function renderSearches(){
+  var box = $('recent-searches'); if (!box) return;
+  var arr = loadJSON(LS.searches, []);
+  if (!arr.length || query){ box.hidden = true; return; }
+  box.hidden = false;
+  box.innerHTML = '<span class="rs-label">🕘 Recent:</span>' + arr.map(function(q){ return '<button type="button" class="rs-chip">' + escapeHtml(q) + '</button>'; }).join('');
+  box.querySelectorAll('.rs-chip').forEach(function(c){
+    c.addEventListener('click', function(){ $('search').value = c.textContent; query = c.textContent; $('search-clear').hidden = false; render(); });
+  });
+}
 $('search').addEventListener('input', function(){
   query = this.value; $('search-clear').hidden = !query;
   clearTimeout(searchTimer);
-  searchTimer = setTimeout(render, 120);
+  searchTimer = setTimeout(function(){ render(); if (query.trim().length >= 2) saveSearch(query.trim()); }, 120);
 });
+document.addEventListener('keydown', function(e){
+  if (e.key === '/' && !e.metaKey && !e.ctrlKey && !/INPUT|TEXTAREA/.test((document.activeElement || {}).tagName || '')){
+    e.preventDefault(); scrollTo({ top:0, behavior:'smooth' }); $('search').focus();
+  }
+});
+$('sheet-close').addEventListener('click', closeSheet);
+$('sheet').addEventListener('click', function(e){ if (e.target === this) closeSheet(); });
+$('sheet-open').addEventListener('click', function(){ var t = sheetTile; closeSheet(); if (t) openTile(t); });
+$('sheet-fav').addEventListener('click', function(){ var t = sheetTile; closeSheet(); if (t) toggleFav(t.id, null); });
+$('sheet-copy').addEventListener('click', function(){ var t = sheetTile; closeSheet(); if (t) copyLink(t); });
+$('sheet-share').addEventListener('click', function(){ var t = sheetTile; closeSheet(); if (t) shareTile(t); });
 $('search-clear').addEventListener('click', function(){
   query = ''; $('search').value = ''; this.hidden = true; render(); $('search').focus();
 });
@@ -1203,12 +1305,15 @@ addEventListener('scroll', function(){
   var max = document.documentElement.scrollHeight - innerHeight;
   $('scroll-progress').style.width = (max > 0 ? Math.min(100, scrollY / max * 100) : 0) + '%';
   $('to-top').classList.toggle('show', scrollY > 600);
+  var pct = max > 0 ? Math.min(100, scrollY / max * 100) : 0;
+  $('to-top').style.background = 'radial-gradient(circle, rgba(17,28,58,.96) 58%, transparent 60%), conic-gradient(var(--emerald-bright) ' + pct + '%, rgba(255,255,255,.12) ' + pct + '%)';
 }, { passive:true });
 $('to-top').addEventListener('click', function(){ scrollTo({ top:0, behavior:'smooth' }); });
 
 /* Accent + density settings */
 function applySettings(){
-  document.body.dataset.accent = settings.accent || 'emerald';
+  if (settings.accent === 'emerald'){ settings.accent = 'orange'; saveJSON(LS.set, settings); }
+  document.body.dataset.accent = settings.accent || 'orange';
   document.body.classList.toggle('compact', settings.density === 'compact');
   document.querySelectorAll('.accent-btn').forEach(function(b){ b.setAttribute('aria-pressed', b.dataset.acc === settings.accent ? 'true' : 'false'); });
   $('density-btn').textContent = '🔤 Density: ' + (settings.density === 'compact' ? 'Compact' : 'Comfort');
@@ -1655,6 +1760,26 @@ var TOOLS = [
       });
     }
     draw();
+  }},
+  { id:'acc', e:'🧡', name:'Accent', open:function(v){
+    v.innerHTML = '<h4>🧡 Accent color</h4><div class="tv-out">Deck accent is <b>' + settings.accent + '</b>. Cycle through Orange → Gold → Ocean.</div>' +
+    '<div class="tv-row" style="margin-top:10px;"><button class="btn primary" id="tv-acc-go">🎨 Cycle accent</button></div>';
+    $('tv-acc-go').addEventListener('click', function(){
+      var order = ['orange','gold','ocean'];
+      var nxt = order[(order.indexOf(settings.accent) + 1) % order.length];
+      settings.accent = nxt; saveJSON(LS.set, settings); applySettings();
+      toast('🎨 Accent: ' + nxt); closePanelAnd(function(){});
+    });
+  }},
+  { id:'reset', e:'🧹', name:'Reset data', open:function(v){
+    v.innerHTML = '<h4>🧹 Reset deck data</h4><div class="tv-out">Clears favorites, recents, custom tiles, recent searches and settings stored on this phone, then reloads the deck fresh. The 83 built-in tiles are untouched.</div>' +
+    '<div class="tv-row" style="margin-top:10px;"><button class="btn primary" id="tv-reset-go">🧹 Reset everything</button></div>';
+    $('tv-reset-go').addEventListener('click', function(){
+      if (confirm('Reset all deck data on this phone?')){
+        Object.keys(localStorage).filter(function(k){ return k.indexOf('n8cd.') === 0; }).forEach(function(k){ localStorage.removeItem(k); });
+        location.reload();
+      }
+    });
   }}
 ];
 var metroOn = false, metroTimer = null;
