@@ -1,6 +1,6 @@
 /* N8 Command Deck Mobile — service worker (offline-first)
    Bump VERSION whenever the shell changes so phones pick up the new build. */
-const VERSION = 'n8cd-v9';
+const VERSION = 'n8cd-v10';
 const CORE = [
   './',
   './index.html',
